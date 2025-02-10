@@ -1,14 +1,24 @@
 import { useState } from 'react'
 import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Products from './componets/products/products.jsx'
+import Auction from './componets/auction/Auction.jsx'
+import About from './componets/About.jsx'
+import Contact from './componets/Contact.jsx'
+import Home from './componets/Home.jsx'
 
 function App() {
 
   return (
-    <>
-      <img src="/logot.png" alt="logo" height={"350px"} />
-      <h1>Welcome to AgriTarde</h1>
-      <p>We will be live soon..!!</p>
-    </>
+    <Router>
+      <Routes>
+      <Route path='/' element={<Home />} />
+      <Route path='/products' element={<Products />} />
+      <Route path='/auction' element={<Auction />} />
+      <Route path='/aboutus' element={<About />} />
+      <Route path='/contactus' element={<Contact />} />
+      </Routes>
+    </Router>
   )
 }
 
