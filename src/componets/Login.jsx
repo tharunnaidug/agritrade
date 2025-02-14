@@ -28,7 +28,7 @@ const Login = () => {
     };
     return (
         <>
-        <div className="container mt-3 bg-success p-4 rounded">
+        <div className="container mt-3 bg-success p-4 rounded " style={{maxWidth:"500px"}}>
             <h2>Login</h2>
             <form className="mb-4" onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -55,7 +55,7 @@ const Login = () => {
                 </div>
                 <button type="submit" className="btn btn-primary">Login</button>
             </form>
-            <Link to="/register" className="text-decoration-none fs-5 text-dark fw-medium d-block mt-3">
+            <Link to="/register" className="text-decoration-none fs-10 text-dark fw-medium d-block mt-3">
                 Don't Have an Account? Register Now!
             </Link>
         </div>

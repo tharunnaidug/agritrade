@@ -62,7 +62,7 @@ const Register = () => {
   };
 
   return (
-    <div className="container mt-2 bg-success p-3 rounded">
+    <div className="container mt-2 bg-success p-3 rounded "style={{maxWidth:"500px"}}>
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -88,7 +88,7 @@ const Register = () => {
           {errors.username && <div className="invalid-feedback">{errors.username}</div>}
         </div>
         <div className="mb-3">
-          <label htmlFor="exampleInputEmail1" className="form-label cursor-pointer">Email address</label>
+          <label htmlFor="exampleInputEmail1" className="form-label cursor-pointer">*Email address</label>
           <input
             type="email"
             className={`form-control ${errors.email ? 'is-invalid' : ''}`}
@@ -133,6 +133,7 @@ const Register = () => {
         </div>
         <button type="submit" className="btn btn-primary">Register</button>
       </form>
+        <div className='my-1'>*OTP will be sent to Email</div>
       <Link to={`/login`} className='text-decoration-none md:fs-5 text-reset fw-medium my-5'>Already Have an Account? Login Now!</Link>
     </div>
   );

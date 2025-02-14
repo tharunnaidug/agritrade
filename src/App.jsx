@@ -8,6 +8,9 @@ import Contact from './componets/Contact.jsx'
 import Home from './componets/Home.jsx'
 import Register from './componets/Register.jsx'
 import Login from './componets/Login.jsx'
+import Otp from './componets/Otp.jsx'
+import Auctionlive from './componets/auction/Auctionlive.jsx'
+import Addcrop from './componets/auction/Addcrop.jsx'
 
 function App() {
 
@@ -16,11 +19,17 @@ function App() {
       <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/products' element={<Products />} />
-      <Route path='/auction' element={<Auction />} />
       <Route path='/aboutus' element={<About />} />
       <Route path='/contactus' element={<Contact />} />
       <Route path='/register' element={<Register />} />
       <Route path='/login' element={<Login />} />
+
+      <Route path='/otp' element={<Otp />} />
+
+      <Route path='/auction' element={<Auction />} />
+      <Route path='/auctionlive' element={<Auctionlive />} />
+      <Route path='/addcrop' element={<Addcrop />} />
+
       </Routes>
     </Router>
   )
