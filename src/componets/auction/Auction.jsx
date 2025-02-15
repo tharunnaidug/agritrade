@@ -8,7 +8,7 @@ const Auction = () => {
         <Link to='/addcrop'>Add your crop</Link>
       </div>
       <div className="container border border-danger rounded">
-       <Link to='/auctionlive'> <p>Your Auctions</p></Link>
+       <Link to='/userauction'> <p>Your Auctions</p></Link>
       </div>
       <div className="container border border-danger rounded">
         <h1>Auctions</h1>

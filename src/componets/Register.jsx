@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Otp from './Otp';
 // import AppContext from '../../context/AppContext';
 
 
@@ -131,9 +132,9 @@ const Register = () => {
           />
           {errors.dob && <div className="invalid-feedback">{errors.dob}</div>}
         </div>
+      <Otp/>
         <button type="submit" className="btn btn-primary">Register</button>
       </form>
-        <div className='my-1'>*OTP will be sent to Email</div>
       <Link to={`/login`} className='text-decoration-none md:fs-5 text-reset fw-medium my-5'>Already Have an Account? Login Now!</Link>
     </div>
   );

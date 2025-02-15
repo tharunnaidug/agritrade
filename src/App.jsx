@@ -11,6 +11,7 @@ import Login from './componets/Login.jsx'
 import Otp from './componets/Otp.jsx'
 import Auctionlive from './componets/auction/Auctionlive.jsx'
 import Addcrop from './componets/auction/Addcrop.jsx'
+import Userauctions from './componets/auction/Userauctions.jsx'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
       <Route path='/otp' element={<Otp />} />
 
       <Route path='/auction' element={<Auction />} />
+      <Route path='/userauction' element={<Userauctions />} />
       <Route path='/auctionlive' element={<Auctionlive />} />
       <Route path='/addcrop' element={<Addcrop />} />
 
