@@ -12,6 +12,13 @@ import Otp from './componets/Otp.jsx'
 import Auctionlive from './componets/auction/Auctionlive.jsx'
 import Addcrop from './componets/auction/Addcrop.jsx'
 import Userauctions from './componets/auction/Userauctions.jsx'
+import Admin from './componets/admin/admin.jsx'
+import Allusers from './componets/admin/Allusers.jsx'
+import Allauctions from './componets/admin/Allauctions.jsx'
+import Allproducts from './componets/admin/Allproducts.jsx'
+import Updateauction from './componets/admin/Updateauction.jsx'
+import Updateproduct from './componets/admin/Updateproduct.jsx'
+import Updateuser from './componets/admin/Updateuser.jsx'
 
 function App() {
 
@@ -31,6 +38,15 @@ function App() {
       <Route path='/userauction' element={<Userauctions />} />
       <Route path='/auctionlive' element={<Auctionlive />} />
       <Route path='/addcrop' element={<Addcrop />} />
+
+      
+      <Route path='/admin' element={<Admin />} />
+      <Route path='/admin/allusers' element={<Allusers />} />
+      <Route path='/admin/allauctions' element={<Allauctions />} />
+      <Route path='/admin/allproducts' element={<Allproducts />} />
+      <Route path='/admin/updateauction' element={<Updateauction />} />
+      <Route path='/admin/updateproduct' element={<Updateproduct />} />
+      <Route path='/admin/updateuser' element={<Updateuser />} />
 
       </Routes>
     </Router>
