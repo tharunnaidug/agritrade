@@ -19,6 +19,15 @@ import Allproducts from './componets/admin/Allproducts.jsx'
 import Updateauction from './componets/admin/Updateauction.jsx'
 import Updateproduct from './componets/admin/Updateproduct.jsx'
 import Updateuser from './componets/admin/Updateuser.jsx'
+import Updateorder from './componets/admin/Updateorder.jsx'
+import Allorders from './componets/admin/Allorders.jsx'
+import Profile from './componets/user/Profile.jsx'
+import Updateprofile from './componets/user/Updateprofile.jsx'
+import Alluserorders from './componets/user/Alluserorders.jsx'
+import Cart from './componets/user/Cart.jsx'
+import Checkout from './componets/user/Checkout.jsx'
+import Order from './componets/user/order.jsx'
+import Payment from './componets/user/Payment.jsx'
 
 function App() {
 
@@ -44,9 +53,19 @@ function App() {
       <Route path='/admin/allusers' element={<Allusers />} />
       <Route path='/admin/allauctions' element={<Allauctions />} />
       <Route path='/admin/allproducts' element={<Allproducts />} />
+      <Route path='/admin/allorders' element={<Allorders />} />
       <Route path='/admin/updateauction' element={<Updateauction />} />
       <Route path='/admin/updateproduct' element={<Updateproduct />} />
       <Route path='/admin/updateuser' element={<Updateuser />} />
+      <Route path='/admin/updateorder' element={<Updateorder />} />
+
+      <Route path='/user/profile' element={<Profile />} />
+      <Route path='/user/updateprofile' element={<Updateprofile />} />
+      <Route path='/user/allorders' element={<Alluserorders />} />
+      <Route path='/user/cart' element={<Cart />} />
+      <Route path='/user/checkout' element={<Checkout />} />
+      <Route path='/user/order' element={<Order />} />
+      <Route path='/user/payment' element={<Payment />} />
 
       </Routes>
     </Router>
