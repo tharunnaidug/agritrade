@@ -26,7 +26,7 @@ import Updateprofile from './componets/user/Updateprofile.jsx'
 import Alluserorders from './componets/user/Alluserorders.jsx'
 import Cart from './componets/user/Cart.jsx'
 import Checkout from './componets/user/Checkout.jsx'
-import Order from './componets/user/order.jsx'
+import Order from './componets/user/Order.jsx'
 import Payment from './componets/user/Payment.jsx'
 
 function App() {
