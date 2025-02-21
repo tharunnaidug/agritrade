@@ -12,6 +12,7 @@ const Admin = () => {
                     <Link to='/admin/allusers'className='btn btn-success m-1' >All Users </Link>
                     <Link to='/admin/allauctions' className='btn btn-success m-1'>All Auctions </Link>
                     <Link to='/admin/allorders' className='btn btn-success m-1'>All Orders </Link>
+                    <Link to='/admin/allsellers' className='btn btn-success m-1'>All Sellers </Link>
                     <Link to='/admin/updateauction'className='btn btn-success m-1' >Update Auction </Link>
                     <Link to='/admin/updateproduct' className='btn btn-success m-1'>Update Product </Link>
                     <Link to='/admin/updateuser'className='btn btn-success m-1' >Update User </Link>

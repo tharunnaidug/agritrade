@@ -1,18 +1,17 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Otp from './Otp';
+import Otp from '../Otp';
 // import AppContext from '../../context/AppContext';
 
 
-const Register = () => {
+const Sregister = () => {
   // const {register}= useContext(AppContext)
   const [formData, setFormData] = useState({
-    name: '',
+    companyname: '',
     username: '',
     email: '',
     password: '',
-    phno: '',
-    dob: ''
+    phno: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -25,12 +24,11 @@ const Register = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.name) newErrors.name = 'Full Name is required';
+    if (!formData.companyname) newErrors.companyname = 'companyname is required';
     if (!formData.username) newErrors.username = 'Username is required';
     if (!formData.email) newErrors.email = 'Email is required';
     if (!formData.password) newErrors.password = 'Password is required';
     if (!formData.phno) newErrors.phno = 'Phone Number is required';
-    if (!formData.dob) newErrors.dob = 'Date of Birth is required';
     return newErrors;
   };
 
@@ -64,18 +62,18 @@ const Register = () => {
 
   return (
     <div className="container mt-2 bg-success p-3 rounded "style={{maxWidth:"500px"}}>
-      <h2>Register</h2>
+      <h2>Seller Register</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="name" className="form-label cursor-pointer">Full Name</label>
+          <label htmlFor="name" className="form-label cursor-pointer">Company Name</label>
           <input
             type="text"
-            className={`form-control ${errors.fullname ? 'is-invalid' : ''}`}
+            className={`form-control ${errors.companyname ? 'is-invalid' : ''}`}
             id="name"
-            value={formData.name}
+            value={formData.companyname}
             onChange={handleInputChange}
           />
-          {errors.fullname && <div className="invalid-feedback">{errors.fullname}</div>}
+          {errors.fullname && <div className="invalid-feedback">{errors.companyname}</div>}
         </div>
         <div className="mb-3">
           <label htmlFor="username" className="form-label cursor-pointer">UserName</label>
@@ -110,35 +108,12 @@ const Register = () => {
           />
           {errors.password && <div className="invalid-feedback">{errors.password}</div>}
         </div>
-        <div className="mb-3">
-          <label htmlFor="phno" className="form-label cursor-pointer">Phone Number</label>
-          <input
-            type="text"
-            className={`form-control ${errors.phno ? 'is-invalid' : ''}`}
-            id="phno"
-            value={formData.phno}
-            onChange={handleInputChange}
-          />
-          {errors.phno && <div className="invalid-feedback">{errors.phno}</div>}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="dob" className="form-label cursor-pointer">Date of birth</label>
-          <input
-            type="date"
-            className={`form-control ${errors.dob ? 'is-invalid' : ''}`}
-            id="dob"
-            value={formData.dob}
-            onChange={handleInputChange}
-          />
-          {errors.dob && <div className="invalid-feedback">{errors.dob}</div>}
-        </div>
       <Otp/>
         <button type="submit" className="btn btn-primary">Register</button>
       </form>
-      <Link to={`/seller/register`} className='text-decoration-none md:fs-5 text-reset fw-medium my-5'>Register As Seller</Link>
-      <Link to={`/login`} className='text-decoration-none md:fs-5 text-reset fw-medium my-5'>Already Have an Account? Login Now!</Link>
+      <Link to={`/seller/login`} className='text-decoration-none md:fs-5 text-reset fw-medium my-5'>Already Seller? Login Now!</Link>
     </div>
   );
 };
 
-export default Register;
+export default Sregister;

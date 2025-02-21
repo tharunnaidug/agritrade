@@ -28,6 +28,16 @@ import Cart from './componets/user/Cart.jsx'
 import Checkout from './componets/user/Checkout.jsx'
 import Order from './componets/user/Order.jsx'
 import Payment from './componets/user/Payment.jsx'
+import Sregister from './componets/seller/Sregister.jsx'
+import Slogin from './componets/seller/Slogin.jsx'
+import Shome from './componets/seller/Shome.jsx'
+import Allsellers from './componets/admin/Allsellers.jsx'
+import Sallorders from './componets/seller/Sallorders.jsx'
+import Sorder from './componets/seller/Sorder.jsx'
+import Supdateorder from './componets/seller/Supdateorder.jsx'
+import Sallproducts from './componets/seller/Sallproducts.jsx'
+import Saddproduct from './componets/seller/Saddproduct.jsx'
+import Supdateproduct from './componets/seller/Supdateproduct.jsx'
 
 function App() {
 
@@ -54,6 +64,7 @@ function App() {
       <Route path='/admin/allauctions' element={<Allauctions />} />
       <Route path='/admin/allproducts' element={<Allproducts />} />
       <Route path='/admin/allorders' element={<Allorders />} />
+      <Route path='/admin/allsellers' element={<Allsellers />} />
       <Route path='/admin/updateauction' element={<Updateauction />} />
       <Route path='/admin/updateproduct' element={<Updateproduct />} />
       <Route path='/admin/updateuser' element={<Updateuser />} />
@@ -66,6 +77,17 @@ function App() {
       <Route path='/user/checkout' element={<Checkout />} />
       <Route path='/user/order' element={<Order />} />
       <Route path='/user/payment' element={<Payment />} />
+
+
+      <Route path='/seller' element={<Shome />} />
+      <Route path='/seller/register' element={<Sregister />} />
+      <Route path='/seller/login' element={<Slogin />} />
+      <Route path='/seller/allorders' element={<Sallorders/>} />
+      <Route path='/seller/allproducts' element={<Sallproducts/>} />
+      <Route path='/seller/addproduct' element={<Saddproduct/>} />
+      <Route path='/seller/order' element={<Sorder/>} />
+      <Route path='/seller/updateorder' element={<Supdateorder/>} />
+      <Route path='/seller/updateproduct' element={<Supdateproduct/>} />
 
       </Routes>
     </Router>
