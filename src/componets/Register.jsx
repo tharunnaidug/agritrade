@@ -12,7 +12,8 @@ const Register = () => {
     email: '',
     password: '',
     phno: '',
-    dob: ''
+    dob: '',
+    profilePic: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -23,6 +24,35 @@ const Register = () => {
     setFormData({ ...formData, [id]: value });
   };
 
+  const handleFileUpload = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ml_default");
+    formData.append("cloud_name","Ydnpu3oocg")
+
+    try {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/Ydnpu3oocg/image/upload`, {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+      return data.secure_url;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      return null;
+    }
+  };
+
+  const handleFile = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const uploadedUrl = await handleFileUpload(file);
+    if (uploadedUrl) {
+      console.log(uploadedUrl);
+      setFormData((prev) => ({ ...prev, profilePic: uploadedUrl }));
+    }
+  };
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name) newErrors.name = 'Full Name is required';
@@ -45,7 +75,7 @@ const Register = () => {
     try {
       const data = await register(formData)
       console.log(data)
-      localStorage.setItem('Agritrade',data?.username)
+      localStorage.setItem('Agritrade', data?.username)
 
       if (data?.error) {
         const newErrors = {};
@@ -63,7 +93,7 @@ const Register = () => {
   };
 
   return (
-    <div className="container mt-2 bg-success p-3 rounded "style={{maxWidth:"500px"}}>
+    <div className="container mt-2 bg-success p-3 rounded " style={{ maxWidth: "500px" }}>
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -122,6 +152,16 @@ const Register = () => {
           {errors.phno && <div className="invalid-feedback">{errors.phno}</div>}
         </div>
         <div className="mb-3">
+          <label htmlFor="pic" className="form-label cursor-pointer">Profile Photo</label>
+          <input
+            type="file"
+            className="form-control"
+            id="pic"
+            onChange={handleFile}
+          />
+          {errors.phno && <div className="invalid-feedback">{errors.phno}</div>}
+        </div>
+        <div className="mb-3">
           <label htmlFor="dob" className="form-label cursor-pointer">Date of birth</label>
           <input
             type="date"
@@ -132,10 +172,10 @@ const Register = () => {
           />
           {errors.dob && <div className="invalid-feedback">{errors.dob}</div>}
         </div>
-      <Otp/>
+        <Otp onSubmit={(otp) => console.log("Entered OTP:", otp)} />
         <button type="submit" className="btn btn-primary">Register</button>
       </form>
-      <Link to={`/seller/register`} className='text-decoration-none md:fs-5 text-reset fw-medium my-5'>Register As Seller</Link>
+      <Link to={`/seller/register`} className='text-decoration-none md:fs-5 text-reset fw-medium my-5 mx-2'>Register As Seller</Link>
       <Link to={`/login`} className='text-decoration-none md:fs-5 text-reset fw-medium my-5'>Already Have an Account? Login Now!</Link>
     </div>
   );
