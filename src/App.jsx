@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { ToastContainer, toast,Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Products from './componets/products/Products.jsx'
 import Auction from './componets/auction/Auction.jsx'
 import About from './componets/About.jsx'
@@ -43,6 +45,7 @@ function App() {
 
   return (
     <Router>
+      <ToastContainer />
       <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/products' element={<Products />} />
