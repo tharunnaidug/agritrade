@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Otp from './Otp';
-// import AppContext from '../../context/AppContext';
+import AppContext from '../context/AppContext';
 
 
 const Register = () => {
-  // const {register}= useContext(AppContext)
+  const {register}= useContext(AppContext)
   const [formData, setFormData] = useState({
     name: '',
     username: '',
