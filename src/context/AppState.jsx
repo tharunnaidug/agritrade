@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AppContext from './AppContext';
 import { toast, Bounce } from 'react-toastify';
 import axios from 'axios';
@@ -9,6 +9,34 @@ const AppState = (props) => {
     const url = "http://localhost:3000";
 
     const [isAuth, setIsAuth] = useState(false);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const getProducts = async () => {
+            try {
+                // let response = await axios.get(`${url}/product`, {
+                //   headers: { "Content-Type": "application/json" },
+                //   withCredentials: true,
+                // });
+                // // console.log(response.data.product);
+                // setProducts(response.data.product);
+                // setFilteredData(response.data.product);
+
+                const username = localStorage.getItem("AGRITRADE");
+                if (username) {
+                    setIsAuth(true);
+                    await userProfile(username);
+                } else {
+                    setIsAuth(false);
+                }
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        }
+
+        getProducts();
+
+    }, [])
 
 
     const login = async (formData) => {
@@ -68,7 +96,7 @@ const AppState = (props) => {
 
             return data;
         } catch (error) {
-            toast.error(error.response?.data?.error ||"Registration Failed!", {
+            toast.error(error.response?.data?.error || "Registration Failed!", {
                 position: "bottom-left",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -95,7 +123,7 @@ const AppState = (props) => {
             const { data } = await axios.post(`${url}/user/genarateOtp`, { email }, {
                 headers: { 'Content-Type': 'application/json' },
             });
-    
+
             toast.success("OTP Sent to Email!", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -107,8 +135,8 @@ const AppState = (props) => {
                 theme: "dark",
                 transition: Bounce,
             });
-    
-            return data; 
+
+            return data;
         } catch (error) {
             toast.error("Failed to send OTP!", {
                 position: "bottom-left",
@@ -129,7 +157,7 @@ const AppState = (props) => {
             const { data } = await axios.post(`${url}/user/genarateOtp`, { email }, {
                 headers: { 'Content-Type': 'application/json' },
             });
-    
+
             toast.success("OTP Sent to Email!", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -141,8 +169,8 @@ const AppState = (props) => {
                 theme: "dark",
                 transition: Bounce,
             });
-    
-            return data; 
+
+            return data;
         } catch (error) {
             toast.error("Failed to send OTP!", {
                 position: "bottom-left",
@@ -158,11 +186,23 @@ const AppState = (props) => {
             throw error;
         }
     };
-    
+    const userProfile = async (username) => {
+        try {
+            let response = await axios.get(`${url}/user/profile/${username}`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            setUser(response.data);
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
+    };
+
 
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout,sendOtp,sendSellerOtp }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user }}>
             {props.children}
         </AppContext.Provider>
     )
