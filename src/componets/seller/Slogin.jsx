@@ -11,8 +11,7 @@ const Slogin = () => {
     });
 
     const [errors, setErrors] = useState({});
-    const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
-    const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false); 
 
     const validateForm = () => {
         const newErrors = {};
@@ -48,7 +47,7 @@ const Slogin = () => {
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setFormData({ ...formData, [id]: value });
-        setErrors((prev) => ({ ...prev, [id]: '' })); // Clear error on change
+        setErrors((prev) => ({ ...prev, [id]: '' }));
     };
 
     const togglePasswordVisibility = () => {
@@ -58,10 +57,10 @@ const Slogin = () => {
     return (
         <>
             <div className="container mt-3 bg-success p-4 rounded" style={{ maxWidth: "500px" }}>
-                <h2>Seller Login</h2>
+                <h2 className='text-white'>Seller Login</h2>
                 <form className="mb-4" onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label htmlFor="username" className="form-label">Username</label>
+                        <label htmlFor="username" className="form-label text-white">Username</label>
                         <input
                             type="text"
                             className={`form-control ${errors.username ? 'is-invalid' : ''}`}
@@ -74,7 +73,7 @@ const Slogin = () => {
                     </div>
 
                     <div className="mb-3 position-relative">
-                        <label htmlFor="password" className="form-label">Password</label>
+                        <label htmlFor="password" className="form-label text-white">Password</label>
                         <input
                             type={showPassword ? "text" : "password"}
                             className={`form-control ${errors.password ? 'is-invalid' : ''}`}
@@ -100,7 +99,7 @@ const Slogin = () => {
                     <button type="submit" className="btn btn-primary">Login</button>
                 </form>
 
-                <Link to="/seller/register" className="text-decoration-none fs-10 text-dark fw-medium d-block mt-3">
+                <Link to="/seller/register" className="text-decoration-none fs-10 text-white fw-medium d-block mt-3">
                     Don't Have an Account? Register Now!
                 </Link>
             </div>

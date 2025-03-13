@@ -10,13 +10,13 @@ const Login = () => {
         password: ''
     });
     const [errors, setErrors] = useState({});
-    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [id]: value }));
-        setErrors((prevErrors) => ({ ...prevErrors, [id]: '' })); // Clear error on typing
+        setErrors((prevErrors) => ({ ...prevErrors, [id]: '' })); 
     };
 
     const validateForm = () => {
@@ -45,7 +45,7 @@ const Login = () => {
                 setErrors(newErrors);
             } else {
                 localStorage.setItem('AGRITRADE', data?.username);
-                navigate('/');
+                navigate('/user/profile');
             }
         } catch (error) {
             console.error('Login failed:', error);

@@ -8,6 +8,9 @@ const Sregister = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [receivedOtp, setReceivedOtp] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
+  const [otpError, setOtpError] = useState(""); 
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -32,12 +35,17 @@ const Sregister = () => {
       setErrors((prev) => ({ ...prev, email: 'Email is required to send OTP' }));
       return;
     }
+    setLoading(true); 
     try {
       const data = await sendSellerOtp(formData.email);
       setReceivedOtp(data.otp);
       setOtpSent(true);
+      setLoading(true); 
     } catch (error) {
       console.error("Failed to send OTP", error);
+      setOtpError("Failed to send OTP. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -82,10 +90,10 @@ const Sregister = () => {
 
   return (
     <div className="container mt-2 bg-success p-3 rounded" style={{ maxWidth: "500px" }}>
-      <h2>Seller Register</h2>
+      <h2 className='text-white'>Seller Register</h2>
       <form onSubmit={otpSent && otpVerified ? handleSubmit : (e) => e.preventDefault()}>
         <div className="mb-3">
-          <label htmlFor="companyname" className="form-label cursor-pointer">Company Name</label>
+          <label htmlFor="companyname" className="form-label cursor-pointer text-white">Company Name</label>
           <input
             type="text"
             className={`form-control ${errors.companyname ? 'is-invalid' : ''}`}
@@ -98,7 +106,7 @@ const Sregister = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="username" className="form-label cursor-pointer">UserName</label>
+          <label htmlFor="username" className="form-label cursor-pointer text-white">UserName</label>
           <input
             type="text"
             className={`form-control ${errors.username ? 'is-invalid' : ''}`}
@@ -111,7 +119,7 @@ const Sregister = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="email" className="form-label cursor-pointer">*Email address</label>
+          <label htmlFor="email" className="form-label cursor-pointer text-white">*Email address</label>
           <input
             type="email"
             className={`form-control ${errors.email ? 'is-invalid' : ''}`}
@@ -124,7 +132,7 @@ const Sregister = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="password" className="form-label cursor-pointer">Password</label>
+          <label htmlFor="password" className="form-label cursor-pointer text-white">Password</label>
           <input
             type="password"
             className={`form-control ${errors.password ? 'is-invalid' : ''}`}
@@ -137,7 +145,7 @@ const Sregister = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="confirmPassword" className="form-label cursor-pointer">Confirm Password</label>
+          <label htmlFor="confirmPassword" className="form-label cursor-pointer text-white">Confirm Password</label>
           <input
             type="password"
             className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
@@ -150,7 +158,7 @@ const Sregister = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="phno" className="form-label cursor-pointer">Phone Number</label>
+          <label htmlFor="phno" className="form-label cursor-pointer text-white">Phone Number</label>
           <input
             type="text"
             className={`form-control ${errors.phno ? 'is-invalid' : ''}`}
@@ -162,31 +170,36 @@ const Sregister = () => {
           {errors.phno && <div className="invalid-feedback">{errors.phno}</div>}
         </div>
 
-        {/* OTP Section */}
         {!otpSent && (
-          <button type="button" className="btn btn-warning my-3" onClick={handleSendOtp}>
-            Send OTP
+          <button type="button" className="btn btn-warning my-3" onClick={handleSendOtp} disabled={loading}>
+            {loading ? 'Sending OTP...' : 'Send OTP'}
           </button>
         )}
+        {otpError && <p className='text-danger'>{otpError}</p>}
         {otpSent && !otpVerified && (
-          <Otp onSubmit={(otp) => setOtpVerified(otp === receivedOtp)} />
+          <Otp onSubmit={(otp) => {
+            if (otp === receivedOtp) {
+              setOtpVerified(true);
+              setOtpError("");
+            } else {
+              setOtpError("Invalid OTP. Please try again.");
+            }
+          }} />
         )}
+        {otpError && <p className='text-danger'>{otpError}</p>}
 
-        {otpVerified && (
-          <button type="submit" className="btn btn-primary mt-3">
-            Register
-          </button>
-        )}
+        {otpVerified && <button type="submit" className="btn btn-primary mt-3">Register</button>}
+
       </form>
 
-      <div className="mt-3">
-        <Link to={`/seller/login`} className="text-decoration-none md:fs-5 text-reset fw-medium">
+      <div className="mt-3 text-white">
+        <Link to={`/seller/login`} className=" text-decoration-none md:fs-5 text-reset fw-medium">
           Already a Seller? Login Now!
         </Link>
       </div>
 
-      <div className="mt-2">
-        <Link to={`/register`} className="text-decoration-none md:fs-5 text-reset fw-medium">
+      <div className="mt-2 text-white">
+        <Link to={`/register`} className="text-decoration-none md:fs-5 text-reset fw-medium text-white">
           Register as User
         </Link>
       </div>

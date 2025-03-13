@@ -8,6 +8,9 @@ const Register = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [receivedOtp, setReceivedOtp] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
+  const [otpError, setOtpError] = useState(""); 
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -34,12 +37,17 @@ const Register = () => {
       setErrors((prev) => ({ ...prev, email: 'Email is required to send OTP' }));
       return;
     }
+    setLoading(true); 
     try {
       const data = await sendOtp(formData.email);
       setReceivedOtp(data.otp);
       setOtpSent(true);
+      setLoading(true); 
     } catch (error) {
       console.error("Failed to send OTP", error);
+      setOtpError("Failed to send OTP. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,7 +59,6 @@ const Register = () => {
       body: formData,
     });
     const data = await response.json();
-    console.log(data.data.url)
     return data.data.url;
   };
 
@@ -96,7 +103,7 @@ const Register = () => {
         setErrors(newErrors);
       } else {
         localStorage.setItem('AGRITRADE', data?.username);
-        navigate('/');
+        navigate('/user/profile');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -104,41 +111,18 @@ const Register = () => {
   };
 
   return (
-    <div className="container mt-2 bg-success p-3 rounded" style={{ maxWidth: "500px" }}>
+    <div className="container mt-2 bg-success p-3 rounded text-white" style={{ maxWidth: "500px" }}>
       <h2>Register</h2>
       <form onSubmit={otpSent && otpVerified ? handleSubmit : (e) => e.preventDefault()}>
+        {["name", "username", "email", "password", "confirmPassword", "phno"].map((field, idx) => (
+          <div className="mb-3" key={idx}>
+            <label htmlFor={field} className="form-label">{field === "confirmPassword" ? "Confirm Password" : field.charAt(0).toUpperCase() + field.slice(1)}</label>
+            <input type={field.includes("password") ? "password" : "text"} className={`form-control ${errors[field] ? 'is-invalid' : ''}`} id={field} value={formData[field]} onChange={handleInputChange} placeholder={`Enter your ${field}`} />
+            {errors[field] && <div className="invalid-feedback">{errors[field]}</div>}
+          </div>
+        ))}
         <div className="mb-3">
-          <label htmlFor="name" className="form-label cursor-pointer">Full Name</label>
-          <input type="text" className={`form-control ${errors.name ? 'is-invalid' : ''}`} id="name" value={formData.name} onChange={handleInputChange} placeholder='Enter Your Full name' />
-          {errors.name && <div className="invalid-feedback">{errors.name}</div>}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="username" className="form-label cursor-pointer">Username</label>
-          <input type="text" className={`form-control ${errors.username ? 'is-invalid' : ''}`} id="username" value={formData.username} onChange={handleInputChange} placeholder='Enter Your username' />
-          {errors.username && <div className="invalid-feedback">{errors.username}</div>}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label cursor-pointer">*Email address</label>
-          <input type="email" className={`form-control ${errors.email ? 'is-invalid' : ''}`} id="email" value={formData.email} onChange={handleInputChange} placeholder='OTP Will be Sent to this email' />
-          {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label cursor-pointer">Password</label>
-          <input type="password" className={`form-control ${errors.password ? 'is-invalid' : ''}`} id="password" value={formData.password} onChange={handleInputChange} placeholder='Minimum 8 characters' />
-          {errors.password && <div className="invalid-feedback">{errors.password}</div>}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="confirmPassword" className="form-label cursor-pointer">Confirm Password</label>
-          <input type="text" className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`} id="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} placeholder='Re Enter your password' />
-          {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="phno" className="form-label cursor-pointer">Phone Number</label>
-          <input type="text" className={`form-control ${errors.phno ? 'is-invalid' : ''}`} id="phno" value={formData.phno} onChange={handleInputChange} placeholder='Enter Your Phone Number' />
-          {errors.phno && <div className="invalid-feedback">{errors.phno}</div>}
-        </div>
-        <div className="mb-3">
-          <label htmlFor="pic" className="form-label cursor-pointer">Profile Photo</label>
+          <label htmlFor="pic" className="form-label">Profile Photo</label>
           <input type="file" className="form-control" id="pic" onChange={handleFile} />
         </div>
         <div className="mb-3">
@@ -151,19 +135,38 @@ const Register = () => {
           {errors.gender && <div className="invalid-feedback">{errors.gender}</div>}
         </div>
         <div className="mb-3">
-          <label htmlFor="dob" className="form-label cursor-pointer">Date of birth</label>
+          <label htmlFor="dob" className="form-label">Date of Birth</label>
           <input type="date" className={`form-control ${errors.dob ? 'is-invalid' : ''}`} id="dob" value={formData.dob} onChange={handleInputChange} />
           {errors.dob && <div className="invalid-feedback">{errors.dob}</div>}
         </div>
 
-        {!otpSent && <button type="button" className="btn btn-warning my-3" onClick={handleSendOtp}>Send OTP</button>}
-        {otpSent && !otpVerified && <Otp onSubmit={(otp) => setOtpVerified(otp === receivedOtp)} />}
+        {!otpSent && (
+          <button type="button" className="btn btn-warning my-3" onClick={handleSendOtp} disabled={loading}>
+            {loading ? 'Sending OTP...' : 'Send OTP'}
+          </button>
+        )}
+        {otpError && <p className='text-danger'>{otpError}</p>}
+        {otpSent && !otpVerified && (
+          <Otp onSubmit={(otp) => {
+            if (otp === receivedOtp) {
+              setOtpVerified(true);
+              setOtpError("");
+            } else {
+              setOtpError("Invalid OTP. Please try again.");
+            }
+          }} />
+        )}
+        {otpError && <p className='text-danger'>{otpError}</p>}
+
+        {otpVerified && <button type="submit" className="btn btn-primary mt-3">Register</button>}
       </form>
-     <div>
-       <Link to={`/login`} className='text-decoration-none md:fs-5 text-reset fw-medium my-5'>Already Have an Account? Login Now!</Link>
+
+      <div className="mt-3">
+        <Link to={`/login`} className='text-decoration-none text-reset fw-medium'>Already Have an Account? Login Now!</Link>
       </div>
-      
-      <Link to={`/seller/register`} className='text-decoration-none md:fs-5 text-reset fw-medium my-5'>Register As Seller</Link>
+      <div className="mt-2">
+        <Link to={`/seller/register`} className='text-decoration-none text-reset fw-medium'>Register As Seller</Link>
+      </div>
     </div>
   );
 };
