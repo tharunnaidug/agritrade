@@ -6,7 +6,8 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 const AppState = (props) => {
-    const url = "http://localhost:3000";
+    // const url = "http://localhost:3000";
+    const url = "https://agritradebackend.onrender.com";
 
     const [isAuth, setIsAuth] = useState(false);
     const [user, setUser] = useState(null);
