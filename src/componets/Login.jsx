@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AppContext from '../context/AppContext';
+import { Eye, EyeOff } from 'lucide-react'; 
 
 const Login = () => {
     const { login } = useContext(AppContext);
@@ -9,14 +10,14 @@ const Login = () => {
         password: ''
     });
     const [errors, setErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
     const navigate = useNavigate();
-
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [id]: value }));
+        setErrors((prevErrors) => ({ ...prevErrors, [id]: '' })); // Clear error on typing
     };
-
 
     const validateForm = () => {
         const newErrors = {};
@@ -24,7 +25,6 @@ const Login = () => {
         if (!formData.password.trim()) newErrors.password = 'Password is required';
         return newErrors;
     };
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -52,32 +52,50 @@ const Login = () => {
         }
     };
 
+    const togglePasswordVisibility = () => {
+        setShowPassword((prev) => !prev);
+    };
+
     return (
         <div className="container mt-3 bg-success p-4 rounded" style={{ maxWidth: '500px' }}>
             <h2 className="mb-4 text-white">Login</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label htmlFor="username" className="form-label text-white">Username</label>
+                    <label htmlFor="username" className="form-label text-white cursor-pointer">Username</label>
                     <input
                         type="text"
                         className={`form-control ${errors.username ? 'is-invalid' : ''}`}
                         id="username"
                         value={formData.username}
                         onChange={handleInputChange}
+                        placeholder="Enter your username"
                     />
                     {errors.username && <div className="invalid-feedback">{errors.username}</div>}
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-3 position-relative">
                     <label htmlFor="password" className="form-label text-white">Password</label>
                     <input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                         id="password"
                         value={formData.password}
                         onChange={handleInputChange}
+                        placeholder="Enter your password"
                     />
+                    <span
+                        onClick={togglePasswordVisibility}
+                        style={{ position: 'absolute', right: '10px', top: '38px', cursor: 'pointer' }}
+                    >
+                        {showPassword ? <EyeOff size={20} color="black" /> : <Eye size={20} color="black" />}
+                    </span>
                     {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                </div>
+
+                <div className="m-2">
+                    <Link to="/forgetpassword" className="text-decoration-none text-dark">
+                        Forgot Password?
+                    </Link>
                 </div>
 
                 <button type="submit" className="btn btn-primary w-100">Login</button>

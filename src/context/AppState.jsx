@@ -138,7 +138,7 @@ const AppState = (props) => {
 
             return data;
         } catch (error) {
-            toast.error("Failed to send OTP!", {
+            toast.error(error.response?.data?.error ||"Failed to send OTP!", {
                 position: "bottom-left",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -152,9 +152,24 @@ const AppState = (props) => {
             throw error;
         }
     };
+   
+    const userProfile = async (username) => {
+        try {
+            let response = await axios.get(`${url}/user/profile/${username}`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            setUser(response.data);
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
+        }
+    };
+
+    //Sellers
     const sendSellerOtp = async (email) => {
         try {
-            const { data } = await axios.post(`${url}/user/genarateOtp`, { email }, {
+            const { data } = await axios.post(`${url}/seller/genarateOtp`, { email }, {
                 headers: { 'Content-Type': 'application/json' },
             });
 
@@ -172,7 +187,7 @@ const AppState = (props) => {
 
             return data;
         } catch (error) {
-            toast.error("Failed to send OTP!", {
+            toast.error(error.response?.data?.message ||"Failed to send OTP!", {
                 position: "bottom-left",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -186,23 +201,81 @@ const AppState = (props) => {
             throw error;
         }
     };
-    const userProfile = async (username) => {
+    const sellerLogin = async (formData) => {
         try {
-            let response = await axios.get(`${url}/user/profile/${username}`, {
-                headers: { "Content-Type": "application/json" },
-                withCredentials: true,
+            const { data } = await axios.post(`${url}/seller/login`, formData, {
+                headers: { 'Content-Type': 'application/json' },
             });
-            // console.log(response.data);
-            setUser(response.data);
+
+            setIsAuth(true);
+            toast.success("Welcome Back!", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
+            return data;
         } catch (error) {
-            console.error('Error fetching user profile:', error);
+            toast.error(error.response?.data?.error || "Login Failed!", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+            throw error;
+        }
+    };
+
+    const sellerRegister = async (formData) => {
+        try {
+            const { data } = await axios.post(`${url}/seller/register`, formData, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            setIsAuth(true);
+            toast.success("Welcome! ", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
+            return data;
+        } catch (error) {
+            toast.error(error.response?.data?.error || "Registration Failed!", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+            throw error;
         }
     };
 
 
-
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user,sellerRegister,sellerLogin }}>
             {props.children}
         </AppContext.Provider>
     )

@@ -1,33 +1,55 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Otp from '../Otp';
-// import AppContext from '../../context/AppContext';
-
+import AppContext from '../../context/AppContext';
 
 const Sregister = () => {
-  // const {register}= useContext(AppContext)
+  const { sellerRegister, sendSellerOtp } = useContext(AppContext);
+  const [otpSent, setOtpSent] = useState(false);
+  const [receivedOtp, setReceivedOtp] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     companyname: '',
     username: '',
     email: '',
     password: '',
+    confirmPassword: '',
     phno: ''
   });
 
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate()
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
+    setErrors((prev) => ({ ...prev, [id]: '' }));
+  };
+
+  const handleSendOtp = async () => {
+    if (!formData.email) {
+      setErrors((prev) => ({ ...prev, email: 'Email is required to send OTP' }));
+      return;
+    }
+    try {
+      const data = await sendSellerOtp(formData.email);
+      setReceivedOtp(data.otp);
+      setOtpSent(true);
+    } catch (error) {
+      console.error("Failed to send OTP", error);
+    }
   };
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.companyname) newErrors.companyname = 'companyname is required';
+    if (!formData.companyname) newErrors.companyname = 'Company name is required';
     if (!formData.username) newErrors.username = 'Username is required';
     if (!formData.email) newErrors.email = 'Email is required';
     if (!formData.password) newErrors.password = 'Password is required';
+    if (formData.password && formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
+    if (!formData.confirmPassword) newErrors.confirmPassword = 'Confirm Password is required';
+    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
     if (!formData.phno) newErrors.phno = 'Phone Number is required';
     return newErrors;
   };
@@ -41,19 +63,17 @@ const Sregister = () => {
     }
 
     try {
-      const data = await register(formData)
-      console.log(data)
-      localStorage.setItem('Agritrade',data?.username)
-
+      const data = await sellerRegister(formData);
+      console.log(data);
       if (data?.error) {
         const newErrors = {};
-        if (data?.error?.includes('Username')) newErrors.username = 'Username already exists';
-        if (data?.error?.includes('Email')) newErrors.email = 'Email already exists';
-        if (data?.error?.includes('Phone Number')) newErrors.phno = 'Phone Number already exists';
+        if (data.error.includes('Username')) newErrors.username = 'Username already exists';
+        if (data.error.includes('Email')) newErrors.email = 'Email already exists';
+        if (data.error.includes('Phone Number')) newErrors.phno = 'Phone Number already exists';
         setErrors(newErrors);
       } else {
-        navigate('/');
-        console.log("registered")
+        localStorage.setItem('AGRITRADE', data?.username);
+        navigate('/seller');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -61,20 +81,22 @@ const Sregister = () => {
   };
 
   return (
-    <div className="container mt-2 bg-success p-3 rounded "style={{maxWidth:"500px"}}>
+    <div className="container mt-2 bg-success p-3 rounded" style={{ maxWidth: "500px" }}>
       <h2>Seller Register</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={otpSent && otpVerified ? handleSubmit : (e) => e.preventDefault()}>
         <div className="mb-3">
-          <label htmlFor="name" className="form-label cursor-pointer">Company Name</label>
+          <label htmlFor="companyname" className="form-label cursor-pointer">Company Name</label>
           <input
             type="text"
             className={`form-control ${errors.companyname ? 'is-invalid' : ''}`}
-            id="name"
+            id="companyname"
             value={formData.companyname}
             onChange={handleInputChange}
+            placeholder="Enter your Company name"
           />
-          {errors.fullname && <div className="invalid-feedback">{errors.companyname}</div>}
+          {errors.companyname && <div className="invalid-feedback">{errors.companyname}</div>}
         </div>
+
         <div className="mb-3">
           <label htmlFor="username" className="form-label cursor-pointer">UserName</label>
           <input
@@ -83,35 +105,91 @@ const Sregister = () => {
             id="username"
             value={formData.username}
             onChange={handleInputChange}
+            placeholder="Choose a Username"
           />
           {errors.username && <div className="invalid-feedback">{errors.username}</div>}
         </div>
+
         <div className="mb-3">
-          <label htmlFor="exampleInputEmail1" className="form-label cursor-pointer">*Email address</label>
+          <label htmlFor="email" className="form-label cursor-pointer">*Email address</label>
           <input
             type="email"
             className={`form-control ${errors.email ? 'is-invalid' : ''}`}
             id="email"
             value={formData.email}
             onChange={handleInputChange}
+            placeholder="OTP will be sent to this email"
           />
           {errors.email && <div className="invalid-feedback">{errors.email}</div>}
         </div>
+
         <div className="mb-3">
-          <label htmlFor="exampleInputPassword1" className="form-label cursor-pointer">Password</label>
+          <label htmlFor="password" className="form-label cursor-pointer">Password</label>
           <input
             type="password"
             className={`form-control ${errors.password ? 'is-invalid' : ''}`}
             id="password"
             value={formData.password}
             onChange={handleInputChange}
+            placeholder="Minimum 8 characters"
           />
           {errors.password && <div className="invalid-feedback">{errors.password}</div>}
         </div>
-      <Otp/>
-        <button type="submit" className="btn btn-primary">Register</button>
+
+        <div className="mb-3">
+          <label htmlFor="confirmPassword" className="form-label cursor-pointer">Confirm Password</label>
+          <input
+            type="password"
+            className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
+            id="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleInputChange}
+            placeholder="Re-enter your password"
+          />
+          {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword}</div>}
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="phno" className="form-label cursor-pointer">Phone Number</label>
+          <input
+            type="text"
+            className={`form-control ${errors.phno ? 'is-invalid' : ''}`}
+            id="phno"
+            value={formData.phno}
+            onChange={handleInputChange}
+            placeholder="Enter Your Phone Number"
+          />
+          {errors.phno && <div className="invalid-feedback">{errors.phno}</div>}
+        </div>
+
+        {/* OTP Section */}
+        {!otpSent && (
+          <button type="button" className="btn btn-warning my-3" onClick={handleSendOtp}>
+            Send OTP
+          </button>
+        )}
+        {otpSent && !otpVerified && (
+          <Otp onSubmit={(otp) => setOtpVerified(otp === receivedOtp)} />
+        )}
+
+        {otpVerified && (
+          <button type="submit" className="btn btn-primary mt-3">
+            Register
+          </button>
+        )}
       </form>
-      <Link to={`/seller/login`} className='text-decoration-none md:fs-5 text-reset fw-medium my-5'>Already Seller? Login Now!</Link>
+
+      <div className="mt-3">
+        <Link to={`/seller/login`} className="text-decoration-none md:fs-5 text-reset fw-medium">
+          Already a Seller? Login Now!
+        </Link>
+      </div>
+
+      <div className="mt-2">
+        <Link to={`/register`} className="text-decoration-none md:fs-5 text-reset fw-medium">
+          Register as User
+        </Link>
+      </div>
     </div>
   );
 };
