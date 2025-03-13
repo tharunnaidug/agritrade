@@ -10,6 +10,7 @@ const AppState = (props) => {
 
     const [isAuth, setIsAuth] = useState(false);
     const [user, setUser] = useState(null);
+    const[seller,setSeller]=useState(null);
 
     useEffect(() => {
         const getProducts = async () => {
@@ -26,6 +27,13 @@ const AppState = (props) => {
                 if (username) {
                     setIsAuth(true);
                     await userProfile(username);
+                } else {
+                    setIsAuth(false);
+                }
+                const atSeller=localStorage.getItem("ATSELLER");
+                if (atSeller) {
+                    setIsAuth(true);
+                    await sellerProfile(atSeller);
                 } else {
                     setIsAuth(false);
                 }
@@ -272,10 +280,22 @@ const AppState = (props) => {
             throw error;
         }
     };
+    const sellerProfile = async (username) => {
+        try {
+            let response = await axios.get(`${url}/seller/profile/${username}`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            setSeller(response.data);
+        } catch (error) {
+            console.error('Error fetching Seller profile:', error);
+        }
+    };
 
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user,sellerRegister,sellerLogin }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user,sellerRegister,sellerLogin,seller }}>
             {props.children}
         </AppContext.Provider>
     )

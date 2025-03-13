@@ -12,6 +12,7 @@ const Slogin = () => {
 
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false); 
+    const navigate = useNavigate();
 
     const validateForm = () => {
         const newErrors = {};
@@ -36,8 +37,8 @@ const Slogin = () => {
                 if (data.error.includes('Incorrect Password')) newErrors.password = 'Invalid password';
                 setErrors(newErrors);
             } else {
-                localStorage.setItem('AGRITRADE', data?.username);
-                navigate('/');
+                localStorage.setItem('ATSELLER', data?.username);
+                navigate('/seller');
             }
         } catch (error) {
             console.error('Login failed:', error);

@@ -10,7 +10,7 @@ const Home = () => {
       <Link to='/user/profile' className='btn btn-success m-2'>Profile</Link>
       <Link to='/login' className='btn btn-success m-2'>Login</Link>
       <Link to='/admin' className='btn btn-success m-2'>Admin</Link>
-      <Link to='/seller' className='btn btn-success m-2'>Seller</Link>
+      <Link to='/seller/login' className='btn btn-success m-2'>Seller login</Link>
     </>
   )
 }

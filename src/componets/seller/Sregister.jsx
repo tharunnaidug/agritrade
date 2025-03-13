@@ -80,7 +80,7 @@ const Sregister = () => {
         if (data.error.includes('Phone Number')) newErrors.phno = 'Phone Number already exists';
         setErrors(newErrors);
       } else {
-        localStorage.setItem('AGRITRADE', data?.username);
+        localStorage.setItem('ATSELLER', data?.username);
         navigate('/seller');
       }
     } catch (error) {
