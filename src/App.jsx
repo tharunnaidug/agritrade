@@ -40,6 +40,8 @@ import Supdateorder from './componets/seller/Supdateorder.jsx'
 import Sallproducts from './componets/seller/Sallproducts.jsx'
 import Saddproduct from './componets/seller/Saddproduct.jsx'
 import Supdateproduct from './componets/seller/Supdateproduct.jsx'
+import Forgotpassword from './componets/user/Forgotpassword.jsx';
+import Sforgotpassword from './componets/seller/Sforgotpassword.jsx';
 
 function App() {
 
@@ -80,6 +82,7 @@ function App() {
       <Route path='/user/checkout' element={<Checkout />} />
       <Route path='/user/order' element={<Order />} />
       <Route path='/user/payment' element={<Payment />} />
+      <Route path='/user/forgotpassword' element={<Forgotpassword />} />
 
 
       <Route path='/seller' element={<Shome />} />
@@ -91,6 +94,7 @@ function App() {
       <Route path='/seller/order' element={<Sorder/>} />
       <Route path='/seller/updateorder' element={<Supdateorder/>} />
       <Route path='/seller/updateproduct' element={<Supdateproduct/>} />
+      <Route path='/seller/forgotpassword' element={<Sforgotpassword/>} />
 
       </Routes>
     </Router>

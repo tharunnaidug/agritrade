@@ -91,7 +91,7 @@ const Slogin = () => {
                         </span>
                         {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                         <div className="mt-2">
-                            <Link to="/seller/forget-password" className="text-decoration-none text-dark">
+                            <Link to="/seller/forgotpassword" className="text-decoration-none text-dark">
                                 Forgot Password?
                             </Link>
                         </div>
