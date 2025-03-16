@@ -281,6 +281,41 @@ const AppState = (props) => {
             throw error;
         }
     };
+    const addProduct = async (formData) => {
+        try {
+            const { data } = await axios.post(`${url}/seller/addproduct`, formData, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            setIsAuth(true);
+            toast.success("Product Added ", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
+            return data;
+        } catch (error) {
+            toast.error(error.response?.data?.error || "Product Add Failed!", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+            throw error;
+        }
+    };
     const sellerProfile = async (username) => {
         try {
             let response = await axios.get(`${url}/seller/profile/${username}`, {
@@ -296,7 +331,7 @@ const AppState = (props) => {
 
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user,sellerRegister,sellerLogin,seller }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user,sellerRegister,sellerLogin,seller,addProduct }}>
             {props.children}
         </AppContext.Provider>
     )
