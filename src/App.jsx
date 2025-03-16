@@ -42,6 +42,7 @@ import Saddproduct from './componets/seller/Saddproduct.jsx'
 import Supdateproduct from './componets/seller/Supdateproduct.jsx'
 import Forgotpassword from './componets/user/Forgotpassword.jsx';
 import Sforgotpassword from './componets/seller/Sforgotpassword.jsx';
+import Product from './componets/products/Product.jsx';
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
       <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/products' element={<Products />} />
+      <Route path='/product/:id' element={<Product />} />
       <Route path='/aboutus' element={<About />} />
       <Route path='/contactus' element={<Contact />} />
       <Route path='/register' element={<Register />} />

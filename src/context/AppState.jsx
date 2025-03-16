@@ -11,7 +11,7 @@ const AppState = (props) => {
 
     const [isAuth, setIsAuth] = useState(false);
     const [user, setUser] = useState(null);
-    const[seller,setSeller]=useState(null);
+    const [seller, setSeller] = useState(null);
 
     useEffect(() => {
         const getProducts = async () => {
@@ -31,7 +31,7 @@ const AppState = (props) => {
                 } else {
                     setIsAuth(false);
                 }
-                const atSeller=localStorage.getItem("ATSELLER");
+                const atSeller = localStorage.getItem("ATSELLER");
                 if (atSeller) {
                     setIsAuth(true);
                     await sellerProfile(atSeller);
@@ -147,7 +147,7 @@ const AppState = (props) => {
 
             return data;
         } catch (error) {
-            toast.error(error.response?.data?.error ||"Failed to send OTP!", {
+            toast.error(error.response?.data?.error || "Failed to send OTP!", {
                 position: "bottom-left",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -161,7 +161,7 @@ const AppState = (props) => {
             throw error;
         }
     };
-   
+
     const userProfile = async (username) => {
         try {
             let response = await axios.get(`${url}/user/profile/${username}`, {
@@ -196,7 +196,7 @@ const AppState = (props) => {
 
             return data;
         } catch (error) {
-            toast.error(error.response?.data?.message ||"Failed to send OTP!", {
+            toast.error(error.response?.data?.message || "Failed to send OTP!", {
                 position: "bottom-left",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -323,7 +323,19 @@ const AppState = (props) => {
                 withCredentials: true,
             });
             // console.log(response.data);
-            setSeller(response.data);
+            return (response.data);
+        } catch (error) {
+            console.error('Error fetching Seller profile:', error);
+        }
+    };
+    const sellerAllProducts = async () => {
+        try {
+            let response = await axios.get(`${url}/seller/products`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            console.log(response.data);
+            return response.data;
         } catch (error) {
             console.error('Error fetching Seller profile:', error);
         }
@@ -331,7 +343,7 @@ const AppState = (props) => {
 
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user,sellerRegister,sellerLogin,seller,addProduct }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts }}>
             {props.children}
         </AppContext.Provider>
     )
