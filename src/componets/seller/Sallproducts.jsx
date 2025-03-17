@@ -14,7 +14,8 @@ const Sallproducts = () => {
     try {
       setLoading(true);
       const res = await sellerAllProducts();
-      setProducts(res.product);
+      const activeProducts = res?.product?.filter(product => product.status !== 'deleted');
+      setProducts(activeProducts);
     } catch (error) {
       console.error('Failed to fetch products:', error);
       toast.error("Failed to fetch products!", {
@@ -34,7 +35,7 @@ const Sallproducts = () => {
 
   return (
     <div className="container my-5">
-      <h2 className="mb-4">All Your Products</h2>
+      <h2 className="m-4">All Your Products</h2>
 
       {loading ? (
         <div className="text-center">
@@ -47,7 +48,7 @@ const Sallproducts = () => {
       ) : (
         <div className="row row-cols-1 row-cols-md-3 g-4">
           {products.map((product) => (
-            <div key={product._id} className="col" onClick={() => navigate(`/product/${product._id}`)} style={{ cursor: 'pointer' }}>
+            <div key={product._id} className="col" onClick={() => navigate(`/seller/updateproduct/${product._id}`)} style={{ cursor: 'pointer' }}>
               <div className="card h-100 shadow-sm border-0">
                 <div className="ratio ratio-4x3">
                   {product.imgSrc.length > 0 ? (
@@ -64,6 +65,7 @@ const Sallproducts = () => {
                   <p className="card-text mb-1"><strong>₹ {product.price}</strong></p>
                   <p className="card-text text-muted small mb-0">Qty: {product.qty}</p>
                   <p className="card-text text-muted small">Category: {product.category}</p>
+                  <p className="card-text text-muted small">Status: {product.status}</p>
                 </div>
               </div>
             </div>

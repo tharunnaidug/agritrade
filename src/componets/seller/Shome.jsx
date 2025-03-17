@@ -12,7 +12,7 @@ const Shome = () => {
         <Link to='/seller/allproducts' className='btn btn-success m-1'>Your Products</Link>
         <Link to='/seller/allorders' className='btn btn-success m-1'>Your Orders</Link>
         <Link to='/seller/updateorder' className='btn btn-success m-1'>Update Order</Link>
-        <Link to='/seller/updateproduct' className='btn btn-success m-1'>Update Product</Link>
+        {/* <Link to='/seller/updateproduct' className='btn btn-success m-1'>Update Product</Link> */}
       </div>
     </>
   )

@@ -94,8 +94,8 @@ function App() {
       <Route path='/seller/allproducts' element={<Sallproducts/>} />
       <Route path='/seller/addproduct' element={<Saddproduct/>} />
       <Route path='/seller/order' element={<Sorder/>} />
-      <Route path='/seller/updateorder' element={<Supdateorder/>} />
-      <Route path='/seller/updateproduct' element={<Supdateproduct/>} />
+      <Route path='/seller/updateorder/:id' element={<Supdateorder/>} />
+      <Route path='/seller/updateproduct/:id' element={<Supdateproduct/>} />
       <Route path='/seller/forgotpassword' element={<Sforgotpassword/>} />
 
       </Routes>

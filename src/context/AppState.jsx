@@ -316,6 +316,17 @@ const AppState = (props) => {
             throw error;
         }
     };
+    const updateProduct = async (formData, id) => {
+        try {
+            const { data } = await axios.post(`${url}/seller/updateproduct/${id}`, formData, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    };
     const sellerProfile = async (username) => {
         try {
             let response = await axios.get(`${url}/seller/profile/${username}`, {
@@ -323,6 +334,7 @@ const AppState = (props) => {
                 withCredentials: true,
             });
             // console.log(response.data);
+            setSeller(response.data)
             return (response.data);
         } catch (error) {
             console.error('Error fetching Seller profile:', error);
@@ -334,16 +346,40 @@ const AppState = (props) => {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
+            // console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching Seller All Products ', error);
+        }
+    };
+    const sellerProduct = async (id) => {
+        try {
+            let response = await axios.get(`${url}/seller/product/${id}`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
             console.log(response.data);
             return response.data;
         } catch (error) {
-            console.error('Error fetching Seller profile:', error);
+            console.error('Error fetching Seller Product', error);
+        }
+    };
+    const deleteProduct = async (id) => {
+        try {
+            let response = await axios.get(`${url}/seller/deleteproduct/${id}`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching Seller Product', error);
         }
     };
 
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct }}>
             {props.children}
         </AppContext.Provider>
     )
