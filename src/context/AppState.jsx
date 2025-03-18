@@ -6,24 +6,21 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 const AppState = (props) => {
-    // const url = "http://localhost:3000";
-    const url = "https://agritradebackend.onrender.com";
+    const url = "http://localhost:3000";
+    // const url = "https://agritradebackend.onrender.com";
 
     const [isAuth, setIsAuth] = useState(false);
     const [user, setUser] = useState(null);
     const [seller, setSeller] = useState(null);
+    const [userReload,setUserReload]=useState(false)
+    const [reload,setReload]=useState(false)
+    const [products,setProducts]=useState(null)
+    const [filteredData,setFilteredData]=useState(null)
+    
 
     useEffect(() => {
-        const getProducts = async () => {
+        const getAuth = async () => {
             try {
-                // let response = await axios.get(`${url}/product`, {
-                //   headers: { "Content-Type": "application/json" },
-                //   withCredentials: true,
-                // });
-                // // console.log(response.data.product);
-                // setProducts(response.data.product);
-                // setFilteredData(response.data.product);
-
                 const username = localStorage.getItem("AGRITRADE");
                 if (username) {
                     setIsAuth(true);
@@ -43,9 +40,31 @@ const AppState = (props) => {
             }
         }
 
-        getProducts();
+        getAuth();
+        setUserReload(false);
 
-    }, [])
+    }, [userReload])
+
+    useEffect(() => {
+        const getProducts = async () => {
+            try {
+                let response = await axios.get(`${url}/product`, {
+                  headers: { "Content-Type": "application/json" },
+                  withCredentials: true,
+                });
+                console.log(response.data.product);
+                setProducts(response.data.product);
+                setFilteredData(response.data.product);
+
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        }
+
+        getProducts();
+        setReload(false);
+
+    }, [reload])
 
 
     const login = async (formData) => {
@@ -125,7 +144,18 @@ const AppState = (props) => {
             headers: { 'Content-Type': 'application/json' },
         });
         localStorage.removeItem("AGRITRADE");
-        return response.json();
+        toast.success(response?.data?.message, {
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+        });
+        return response;
     };
     const sendOtp = async (email) => {
         try {
@@ -228,7 +258,7 @@ const AppState = (props) => {
                 theme: "dark",
                 transition: Bounce,
             });
-
+            setUserReload(true);
             return data;
         } catch (error) {
             toast.error(error.response?.data?.error || "Login Failed!", {
@@ -264,7 +294,7 @@ const AppState = (props) => {
                 theme: "dark",
                 transition: Bounce,
             });
-
+            setUserReload(true);
             return data;
         } catch (error) {
             toast.error(error.response?.data?.error || "Registration Failed!", {
@@ -280,6 +310,26 @@ const AppState = (props) => {
             });
             throw error;
         }
+    };
+    const sellerLogout = async () => {
+        setIsAuth(false);
+        const response = await axios.get(`${url}/logout`, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+        localStorage.removeItem("ATSELLER");
+        toast.success(response?.data?.message, {
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+        });
+
+        return response
     };
     const addProduct = async (formData) => {
         try {
@@ -358,7 +408,7 @@ const AppState = (props) => {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
-            console.log(response.data);
+            // console.log(response.data);
             return response.data;
         } catch (error) {
             console.error('Error fetching Seller Product', error);
@@ -379,7 +429,7 @@ const AppState = (props) => {
 
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout,sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct ,products }}>
             {props.children}
         </AppContext.Provider>
     )

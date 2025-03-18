@@ -1,10 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useContext } from 'react';
 import AppContext from '../../context/AppContext';
 
 const Profile = () => {
-  const { user } = useContext(AppContext);
-  // console.log(user);
+  const { user ,logout} = useContext(AppContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/user/login');
+  };
 
   return (
     <>
@@ -83,6 +88,7 @@ const Profile = () => {
         <Link to='/user/updateprofile' className='btn btn-success'>Update Profile</Link>
         <Link to='/user/allorders' className='btn btn-success'>All Orders</Link>
         <Link to='/user/cart' className='btn btn-success'>Cart</Link>
+        <button className="btn btn-danger m-1" onClick={handleLogout}>Logout</button>
       </div>
     </>
   );

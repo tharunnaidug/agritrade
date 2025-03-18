@@ -29,7 +29,7 @@ const Slogin = () => {
 
         try {
             const data = await sellerLogin(formData);
-            console.log("Login response:", data);
+            // console.log("Login response:", data);
 
             if (data?.error) {
                 const newErrors = {};
