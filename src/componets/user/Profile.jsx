@@ -8,7 +8,7 @@ const Profile = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/user/login');
+    navigate('/login');
   };
 
   return (

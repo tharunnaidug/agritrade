@@ -6,8 +6,8 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 const AppState = (props) => {
-    const url = "http://localhost:3000";
-    // const url = "https://agritradebackend.onrender.com";
+    // const url = "http://localhost:3000";
+    const url = "https://agritradebackend.onrender.com";
 
     const [isAuth, setIsAuth] = useState(false);
     const [user, setUser] = useState(null);
@@ -204,6 +204,43 @@ const AppState = (props) => {
             console.error('Error fetching user profile:', error);
         }
     };
+    const addToCart = async (productId, title, price, qty, imgScr) => {
+        // console.log("frontend ",imgScr)
+        try {
+          let response = await axios.post(`${url}/user/cart/add`,
+            { productId, title, price, qty, imgScr }, {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          });
+          // console.log("myCart", response.data.message);
+          setReload(!reload);
+          toast.info( response.data.message, {
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+            });
+    
+        } catch (error) {
+          console.error('Error Adding To Cart:', error);
+          toast.info( response.data.message||"Internal Server Error", {
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+            });
+        }
+      };
 
     //Sellers
     const sendSellerOtp = async (email) => {
@@ -429,7 +466,7 @@ const AppState = (props) => {
 
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout,sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct ,products }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout,sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct ,products,addToCart }}>
             {props.children}
         </AppContext.Provider>
     )
