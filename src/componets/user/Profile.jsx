@@ -1,15 +1,24 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useContext } from 'react';
 import AppContext from '../../context/AppContext';
+import { TriangleAlert } from 'lucide-react';
 
 const Profile = () => {
-  const { user ,logout} = useContext(AppContext);
+  const { user ,logout ,isAuth} = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout();
     navigate('/login');
   };
+
+  if(!isAuth){
+    return (<>
+    <TriangleAlert className='mt-5' />
+    <div className="text-center ">Looks like you are not logged in ..!</div> 
+    <Link to='/login' className='btn btn-success mt-4'>Login Now</Link>
+    </>);
+  }
 
   return (
     <>

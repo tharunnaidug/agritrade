@@ -10,13 +10,15 @@ const AppState = (props) => {
     const url = "https://agritradebackend.onrender.com";
 
     const [isAuth, setIsAuth] = useState(false);
+    const [isSeller, setIsSeller] = useState(false);
     const [user, setUser] = useState(null);
     const [seller, setSeller] = useState(null);
-    const [userReload,setUserReload]=useState(false)
-    const [reload,setReload]=useState(false)
-    const [products,setProducts]=useState(null)
-    const [filteredData,setFilteredData]=useState(null)
-    
+    const [userReload, setUserReload] = useState(false)
+    const [reload, setReload] = useState(false)
+    const [products, setProducts] = useState(null)
+    const [filteredData, setFilteredData] = useState(null)
+    const [cart, setCart] = useState(null);
+
 
     useEffect(() => {
         const getAuth = async () => {
@@ -30,10 +32,10 @@ const AppState = (props) => {
                 }
                 const atSeller = localStorage.getItem("ATSELLER");
                 if (atSeller) {
-                    setIsAuth(true);
+                    setIsSeller(true);
                     await sellerProfile(atSeller);
                 } else {
-                    setIsAuth(false);
+                    setIsSeller(false);
                 }
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -41,16 +43,19 @@ const AppState = (props) => {
         }
 
         getAuth();
+        if(isAuth){
+            getCart();
+        }
         setUserReload(false);
 
-    }, [userReload])
+    }, [userReload, isAuth, isSeller])
 
     useEffect(() => {
         const getProducts = async () => {
             try {
                 let response = await axios.get(`${url}/product`, {
-                  headers: { "Content-Type": "application/json" },
-                  withCredentials: true,
+                    headers: { "Content-Type": "application/json" },
+                    withCredentials: true,
                 });
                 console.log(response.data.product);
                 setProducts(response.data.product);
@@ -207,40 +212,146 @@ const AppState = (props) => {
     const addToCart = async (productId, title, price, qty, imgScr) => {
         // console.log("frontend ",imgScr)
         try {
-          let response = await axios.post(`${url}/user/cart/add`,
-            { productId, title, price, qty, imgScr }, {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-          });
-          // console.log("myCart", response.data.message);
-          setReload(!reload);
-          toast.info( response.data.message, {
-            position: "bottom-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            transition: Bounce,
+            let response = await axios.post(`${url}/user/cart/add`,
+                { productId, title, price, qty, imgScr }, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
             });
-    
+            // console.log("myCart", response.data.message);
+            setReload(!reload);
+            toast.info(response.data.message, {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
         } catch (error) {
-          console.error('Error Adding To Cart:', error);
-          toast.info( response.data.message||"Internal Server Error", {
-            position: "bottom-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            transition: Bounce,
+            console.error('Error Adding To Cart:', error);
+            toast.info(response.data.message || "Internal Server Error", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
             });
         }
-      };
+    };
+    const getCart = async () => {
+        try {
+            let response = await axios.get(`${url}/user/cart/`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            setCart(response.data.cart);
+            // console.log(response.data.cart);
+        } catch (error) {
+            console.error('Error fetching Cart:', error);
+        }
+    };
+    const clearCart = async () => {
+        try {
+            let response = await axios.get(`${url}/user/cart/clear`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            console.log(response.data);
+            setUserReload(true);
+            toast.info(response.data.message, {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+        } catch (error) {
+            console.error('Error Clearing Cart:', error);
+        }
+    };
+    const removeQty = async (productId) => {
+        // console.log("frontend ",imgScr)
+        try {
+            let response = await axios.post(`${url}/user/cart/removeQty`,
+                { productId }, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            setUserReload(true);
+            toast.info(response.data.message || "Quantity Decreased", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
+        } catch (error) {
+            console.error('Error Removing Qty to cart:', error);
+            toast.info(response.data.message || "Internal Server Error", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+        }
+    };
+    const addQty = async (productId) => {
+        try {
+            let response = await axios.post(`${url}/user/cart/addQty`,
+                { productId }, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            setUserReload(true);
+            toast.info(response.data.message || "Quantity Added", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
+        } catch (error) {
+            console.error('Error Adding Qty to cart:', error);
+            toast.info(response.data.message || "Internal Server Error", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+        }
+    };
 
     //Sellers
     const sendSellerOtp = async (email) => {
@@ -283,7 +394,7 @@ const AppState = (props) => {
                 headers: { 'Content-Type': 'application/json' },
             });
 
-            setIsAuth(true);
+            setIsSeller(true);
             toast.success("Welcome Back!", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -319,7 +430,7 @@ const AppState = (props) => {
                 headers: { 'Content-Type': 'application/json' },
             });
 
-            setIsAuth(true);
+            setIsSeller(true);
             toast.success("Welcome! ", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -349,7 +460,7 @@ const AppState = (props) => {
         }
     };
     const sellerLogout = async () => {
-        setIsAuth(false);
+        setIsSeller(false);
         const response = await axios.get(`${url}/logout`, {
             headers: { 'Content-Type': 'application/json' },
         });
@@ -373,8 +484,6 @@ const AppState = (props) => {
             const { data } = await axios.post(`${url}/seller/addproduct`, formData, {
                 headers: { 'Content-Type': 'application/json' },
             });
-
-            setIsAuth(true);
             toast.success("Product Added ", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -466,10 +575,11 @@ const AppState = (props) => {
 
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout,sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct ,products,addToCart }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart }}>
             {props.children}
         </AppContext.Provider>
     )
 }
 
 export default AppState;
+//loc =

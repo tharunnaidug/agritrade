@@ -29,7 +29,6 @@ const Product = () => {
         };
         getProduct();
     }, [id]);
-    console.log(product)
 
     if (!product) {
         return (
