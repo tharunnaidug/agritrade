@@ -11,8 +11,10 @@ const AppState = (props) => {
 
     const [isAuth, setIsAuth] = useState(false);
     const [isSeller, setIsSeller] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [user, setUser] = useState(null);
     const [seller, setSeller] = useState(null);
+    const [admin, setAdmin] = useState(null);
     const [userReload, setUserReload] = useState(false)
     const [reload, setReload] = useState(false)
     const [products, setProducts] = useState(null)
@@ -37,8 +39,15 @@ const AppState = (props) => {
                 } else {
                     setIsSeller(false);
                 }
+                const atAdmin=localStorage.getItem("ATADMIN");
+                if(atAdmin){
+                    setIsAdmin(true);
+                    await adminDashboard();
+                }else{
+                    setIsSeller(false);
+                }
             } catch (error) {
-                console.error('Error fetching products:', error);
+                console.error('Error Getting Auth from Browser:', error);
             }
         }
 
@@ -573,9 +582,76 @@ const AppState = (props) => {
         }
     };
 
+    //Admin
+    const adminLogin = async (formData) => {
+         if(formData.username=="admin" &&formData.password=="admin"){
+            console.log(formData)
+
+            setIsAuth(true);
+            toast.success("Welcome Admin !", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
+            return formData;
+        } else {
+            toast.error("Incorrect Admin ID Password", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+            throw error;
+        }
+    };
+    const adminDashboard = async () => {
+        try {
+            let response = await axios.get(`${url}/admin/dashboard`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            setAdmin(response.data)
+            return (response.data);
+        } catch (error) {
+            console.error('Error fetching Admin Dashboard :', error);
+        }
+    };
+    const adminLogout = async () => {
+        setIsAdmin(false);
+        // const response = await axios.get(`${url}/logout`, {
+        //     headers: { 'Content-Type': 'application/json' },
+        // });
+        localStorage.removeItem("ATADMIN");
+        toast.success("Logged Out !", {
+            position: "bottom-left",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+        });
+
+        // return true;
+    };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout}}>
             {props.children}
         </AppContext.Provider>
     )

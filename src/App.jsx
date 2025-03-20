@@ -43,6 +43,7 @@ import Supdateproduct from './componets/seller/Supdateproduct.jsx'
 import Forgotpassword from './componets/user/Forgotpassword.jsx';
 import Sforgotpassword from './componets/seller/Sforgotpassword.jsx';
 import Product from './componets/products/Product.jsx';
+import Alogin from './componets/admin/Alogin.jsx';
 
 function App() {
 
@@ -67,6 +68,7 @@ function App() {
 
       
       <Route path='/admin' element={<Admin />} />
+      <Route path='/admin/login' element={<Alogin />} />
       <Route path='/admin/allusers' element={<Allusers />} />
       <Route path='/admin/allauctions' element={<Allauctions />} />
       <Route path='/admin/allproducts' element={<Allproducts />} />

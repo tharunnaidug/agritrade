@@ -1,26 +1,92 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import AppContext from "../../context/AppContext";
+import { TriangleAlert, Users, ShoppingBag, Box, Gavel, Clock, PackageCheck, Truck, CheckCircle, Hourglass } from 'lucide-react';
 
 const Admin = () => {
-    return (
-        <>
-            <div className="container">
+    const { admin, isAdmin, adminLogout } = useContext(AppContext);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+       
+        if (admin) {
+            setLoading(false);
+        }
+    }, [admin]);
+    const handleLogout = async () => {
+        await adminLogout();
+        navigate('/admin/login');
+    };
+    if (!isAdmin) {
+        return (
+            <div className="d-flex flex-column align-items-center justify-content-center vh-80">
+                <TriangleAlert size={60} className="text-danger mb-3" />
+                <h4 className="text-danger">Access Denied</h4>
+                <p className="text-muted">Looks like you are not logged in ..!</p>
+                <Link to='/admin/login' className='btn btn-success mt-3'>Login Now</Link>
+            </div>
+        );
+    }
 
-                <div className="container d-flex m-2 p-2 flex-column">
-
-                    <Link to='/admin/allproducts' className='btn btn-success m-1'>All Products </Link>
-                    <Link to='/admin/allusers'className='btn btn-success m-1' >All Users </Link>
-                    <Link to='/admin/allauctions' className='btn btn-success m-1'>All Auctions </Link>
-                    <Link to='/admin/allorders' className='btn btn-success m-1'>All Orders </Link>
-                    <Link to='/admin/allsellers' className='btn btn-success m-1'>All Sellers </Link>
-                    <Link to='/admin/updateauction'className='btn btn-success m-1' >Update Auction </Link>
-                    <Link to='/admin/updateproduct' className='btn btn-success m-1'>Update Product </Link>
-                    <Link to='/admin/updateuser'className='btn btn-success m-1' >Update User </Link>
-                    <Link to='/admin/updateorder'className='btn btn-success m-1' >Update Order </Link>
+    if (loading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center vh-100">
+                <div className="spinner-border text-success" role="status">
+                    <span className="visually-hidden">Loading...</span>
                 </div>
             </div>
-        </>
-    )
-}
+        );
+    }
 
-export default Admin
+
+    return (
+        <div className="container mt-4">
+            <h2 className="text-center fw-bold mb-4">Admin Dashboard</h2>
+
+            <div className="row g-3">
+                <DashboardCard title="Total Users" value={admin.dashboard.totalUsers} icon={<Users size={32} />} bgColor="primary" />
+                <DashboardCard title="Total Sellers" value={admin.dashboard.totalSellers} icon={<ShoppingBag size={32} />} bgColor="success" />
+                <DashboardCard title="Total Products" value={admin.dashboard.totalProducts} icon={<Box size={32} />} bgColor="warning" />
+                <DashboardCard title="Total Auctions" value={admin.dashboard.totalAuctions} icon={<Gavel size={32} />} bgColor="info" />
+                <DashboardCard title="Pending Auctions" value={admin.dashboard.pendingAuctions} icon={<Clock size={32} />} bgColor="danger" />
+                <DashboardCard title="Total Orders" value={admin.dashboard.totalOrders} icon={<PackageCheck size={32} />} bgColor="primary" />
+                <DashboardCard title="Delivered Orders" value={admin.dashboard.deliveredOrders} icon={<CheckCircle size={32} />} bgColor="success" />
+                <DashboardCard title="Shipped Orders" value={admin.dashboard.shippedOrders} icon={<Truck size={32} />} bgColor="info" />
+                <DashboardCard title="Confirmed Orders" value={admin.dashboard.confirmedOrders} icon={<CheckCircle size={32} />} bgColor="primary" />
+                <DashboardCard title="Pending Orders" value={admin.dashboard.pendingOrders} icon={<Hourglass size={32} />} bgColor="warning" />
+            </div>
+
+            <div className="d-flex flex-wrap justify-content-center mt-4">
+                <NavButton to='/admin/login' text="Login" />
+                <NavButton to='/admin/allproducts' text="All Products" />
+                <NavButton to='/admin/allusers' text="All Users" />
+                <NavButton to='/admin/allauctions' text="All Auctions" />
+                <NavButton to='/admin/allorders' text="All Orders" />
+                <NavButton to='/admin/allsellers' text="All Sellers" />
+                <NavButton to='/admin/updateauction' text="Update Auction" />
+                <NavButton to='/admin/updateproduct' text="Update Product" />
+                <NavButton to='/admin/updateuser' text="Update User" />
+                <NavButton to='/admin/updateorder' text="Update Order" />
+                <button className="btn btn-danger w-100 mt-3" onClick={handleLogout}>Logout</button>
+            
+            </div>
+        </div>
+    );
+};
+
+const DashboardCard = ({ title, value, icon, bgColor }) => (
+    <div className="col-md-4 col-lg-3">
+        <div className={`card shadow-sm text-white bg-${bgColor} p-3 d-flex align-items-center text-center`}>
+            {icon}
+            <h5 className="mt-2">{title}</h5>
+            <p className="fs-4 fw-bold">{value}</p>
+        </div>
+    </div>
+);
+
+const NavButton = ({ to, text }) => (
+    <Link to={to} className="btn btn-outline-success m-2 px-4 py-2 shadow-sm fw-bold">{text}</Link>
+);
+
+export default Admin;
