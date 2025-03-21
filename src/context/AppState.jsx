@@ -361,6 +361,78 @@ const AppState = (props) => {
             });
         }
     };
+    const placeOrder = async () => {
+        try {
+            let response = await axios.post(`${url}/user/placeorder`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            console.log(response);
+            setUserReload(true);
+            toast.info(response?.data?.message || "Order Placed", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
+        } catch (error) {
+            console.error('Error Placing Order:', error);
+            toast.info(response?.data?.message || "Internal Server Error", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+        }
+    };
+    const updateAddress = async (formData) => {
+        try {
+            let response = await axios.post(`${url}/user/address/update`,
+                 formData , {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            console.log(formData);
+            console.log(response);
+            setUserReload(true);
+            toast.info(response.data.message || "Address Added", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
+        } catch (error) {
+            console.error('Error Adding Address:', error);
+            toast.info(response.data.message || "Internal Server Error", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+        }
+    };
 
     //Sellers
     const sendSellerOtp = async (email) => {
@@ -651,7 +723,7 @@ const AppState = (props) => {
     };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout}}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder}}>
             {props.children}
         </AppContext.Provider>
     )
