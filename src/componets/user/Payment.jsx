@@ -14,24 +14,30 @@ const Payment = () => {
     const API_URL = import.meta.env.VITE_API_URL;
     const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY;
 
-    if (!isAuth) {
-        return (
-            <>
-                <TriangleAlert className='mt-5' />
-                <div className="text-center ">Looks like you are not Logged in ..!</div>
-                <Link to='/login' className='btn btn-success mt-4'>Login Now</Link>
-            </>
-        )
-    }
-    if (!cart || cart.items?.length == 0) {
-        return (
-            <>
-                <TriangleAlert className='mt-5' />
-                <div className="text-center ">Looks like your cart is empty ..!</div>
-                <Link to='/user/cart' className='btn btn-success mt-4'>Cart</Link>
-            </>
-        )
-    }
+
+    useEffect(() => {
+
+        if (!isAuth) {
+            return (
+                <>
+                    <TriangleAlert className='mt-5' />
+                    <div className="text-center ">Looks like you are not Logged in ..!</div>
+                    <Link to='/login' className='btn btn-success mt-4'>Login Now</Link>
+                </>
+            )
+        }
+        if (!cart || cart.items?.length == 0) {
+            return (
+                <>
+                    <TriangleAlert className='mt-5' />
+                    <div className="text-center ">Looks like your cart is empty ..!</div>
+                    <Link to='/user/cart' className='btn btn-success mt-4'>Cart</Link>
+                </>
+            )
+        }
+        
+    }, [])
+
     const loadRazorpayScript = () => {
         return new Promise((resolve) => {
             if (window.Razorpay) {
