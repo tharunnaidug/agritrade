@@ -653,6 +653,18 @@ const AppState = (props) => {
             console.error('Error fetching Seller Product', error);
         }
     };
+    const sellerAllOrders = async () => {
+        try {
+            let response = await axios.get(`${url}/seller/orders`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching Seller Orders ', error);
+        }
+    };
 
     //Admin
     const adminLogin = async (formData) => {
@@ -723,7 +735,7 @@ const AppState = (props) => {
     };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder}}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders}}>
             {props.children}
         </AppContext.Provider>
     )
