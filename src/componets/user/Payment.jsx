@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AppContext from '../../context/AppContext';
@@ -35,7 +35,7 @@ const Payment = () => {
                 </>
             )
         }
-        
+
     }, [])
 
     const loadRazorpayScript = () => {
