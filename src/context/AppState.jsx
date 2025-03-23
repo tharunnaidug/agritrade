@@ -6,8 +6,7 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 const AppState = (props) => {
-    // const url = "http://localhost:3000";
-    const url = "https://agritradebackend.onrender.com";
+    const url = import.meta.env.VITE_API_URL;
 
     const [isAuth, setIsAuth] = useState(false);
     const [isSeller, setIsSeller] = useState(false);
@@ -361,9 +360,9 @@ const AppState = (props) => {
             });
         }
     };
-    const placeOrder = async () => {
+    const placeOrder = async (payment) => {
         try {
-            let response = await axios.post(`${url}/user/placeorder`, {
+            let response = await axios.post(`${url}/user/placeorder`,{payment}, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });

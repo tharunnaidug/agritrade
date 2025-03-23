@@ -8,8 +8,8 @@ import { ShoppingCart } from 'lucide-react';
 const Product = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    // const url = "http://localhost:3000";
-    const url = "https://agritradebackend.onrender.com";
+    const url = import.meta.env.VITE_API_URL;
+   
 
 
     const [product, setProduct] = useState(null);
