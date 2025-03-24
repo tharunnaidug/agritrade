@@ -592,6 +592,17 @@ const AppState = (props) => {
             throw error;
         }
     };
+    const updateOrder = async ( id,status) => {
+        try {
+            const { data } = await axios.post(`${url}/seller/updateorder/${id}`, status, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    };
     const updateProduct = async (formData, id) => {
         try {
             const { data } = await axios.post(`${url}/seller/updateproduct/${id}`, formData, {
@@ -650,6 +661,18 @@ const AppState = (props) => {
             return response.data;
         } catch (error) {
             console.error('Error fetching Seller Product', error);
+        }
+    };
+    const sellerOrder = async (id) => {
+        try {
+            let response = await axios.get(`${url}/seller/order/${id}`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching Seller Order ', error);
         }
     };
     const sellerAllOrders = async () => {
@@ -734,7 +757,7 @@ const AppState = (props) => {
     };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders}}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder}}>
             {props.children}
         </AppContext.Provider>
     )

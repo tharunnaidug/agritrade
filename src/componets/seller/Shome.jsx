@@ -31,6 +31,7 @@ const Shome = () => {
             <p><strong>Confirmed Orders:</strong> {seller?.ordersCount?.confirmed || 0}</p>
             <p><strong>Shipped Orders:</strong> {seller?.ordersCount?.shipped || 0}</p>
             <p><strong>Delivered Orders:</strong> {seller?.ordersCount?.delivered || 0}</p>
+            <p><strong>Cancelled Orders:</strong> {seller?.ordersCount?.cancelled || 0}</p>
           </div>
         </div>
 
@@ -49,6 +50,7 @@ const Shome = () => {
           <div className="card p-3 mb-3 shadow">
             <h5>Product Statistics</h5>
             <p><strong>Active Products:</strong> {seller?.activeProductsCount || 0}</p>
+            <p><strong>OutOfStock Products:</strong> {seller?.outofstockProductsCount || 0}</p>
           </div>
         </div>
         <div className="col-md-6">
