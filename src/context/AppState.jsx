@@ -402,10 +402,10 @@ const AppState = (props) => {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
-            console.log(formData);
-            console.log(response);
+            // console.log(formData);
+            // console.log(response);
             setUserReload(true);
-            toast.info(response.data.message || "Address Added", {
+            toast.info(response?.data.message || "Address Added", {
                 position: "bottom-left",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -419,7 +419,7 @@ const AppState = (props) => {
 
         } catch (error) {
             console.error('Error Adding Address:', error);
-            toast.info(response.data.message || "Internal Server Error", {
+            toast.info("Address Update Failed", {
                 position: "bottom-left",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -456,7 +456,43 @@ const AppState = (props) => {
             console.error('Error cancelling order:', error);
         }
     };
-    
+    const UpdateUserPro = async (formData) => {
+        try {
+            let response = await axios.post(`${url}/user/profile/update`,
+                 formData , {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(formData);
+            // console.log(response);
+            setUserReload(true);
+            toast.info(response.data.message || "Address Updated", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+
+        } catch (error) {
+            console.error('Error Updating Address:', error);
+            toast.info(response?.data.message || "Internal Server Error", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+        }
+    };
 
     //Sellers
     const sendSellerOtp = async (email) => {
@@ -782,7 +818,7 @@ const AppState = (props) => {
     };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder,userOrder,cancelOrder,setUserReload}}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder,userOrder,cancelOrder,setUserReload,UpdateUserPro}}>
             {props.children}
         </AppContext.Provider>
     )

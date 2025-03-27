@@ -11,7 +11,7 @@ const Profile = () => {
     await logout();
     navigate('/login');
   };
-  console.log(user)
+  // console.log(user)
 
   if (!isAuth) {
     return (<>

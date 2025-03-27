@@ -18,6 +18,14 @@ const SaddProduct = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const categories = [
+    'All', 'Herbicide', 'Pesticide', 'Fungicide',
+    'Cereal & Grain Seeds', 'Vegetable Seeds', 'Fruit Seeds', 'Flower & Medicinal Plants',
+    'Organic Fertilizer', 'Chemical Fertilizer', 'Soil Conditioner',
+    'Hand Tools', 'Irrigation Equipment', 'Machinery',
+    'Animal Husbandry & Dairy Farming', 'Greenhouse', 'Smart Farming', 'Packaging & Storage'
+  ];
+
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
@@ -120,41 +128,18 @@ const SaddProduct = () => {
 
         <div className="mb-3">
           <label htmlFor="category" className="form-label">Category</label>
-          <input
-            type="text"
+          <select
             className={`form-control ${errors.category ? 'is-invalid' : ''}`}
             id="category"
             value={formData.category}
             onChange={handleInputChange}
-            placeholder="Enter product category"
-          />
+          >
+            <option value="">Select a category</option>
+            {categories.map((cat, index) => (
+              <option key={index} value={cat}>{cat}</option>
+            ))}
+          </select>
           {errors.category && <div className="invalid-feedback">{errors.category}</div>}
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="price" className="form-label">Price</label>
-          <input
-            type="number"
-            className={`form-control ${errors.price ? 'is-invalid' : ''}`}
-            id="price"
-            value={formData.price}
-            onChange={handleInputChange}
-            placeholder="Enter price"
-          />
-          {errors.price && <div className="invalid-feedback">{errors.price}</div>}
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="qty" className="form-label">Quantity</label>
-          <input
-            type="number"
-            className={`form-control ${errors.qty ? 'is-invalid' : ''}`}
-            id="qty"
-            value={formData.qty}
-            onChange={handleInputChange}
-            placeholder="Enter quantity"
-          />
-          {errors.qty && <div className="invalid-feedback">{errors.qty}</div>}
         </div>
 
         <div className="mb-3">
@@ -181,7 +166,7 @@ const SaddProduct = () => {
         )}
 
         <button type="submit" className="btn btn-warning mt-3" disabled={loading}>
-          {loading ? 'Please..' : ' Add Product'}
+          {loading ? 'Please wait...' : 'Add Product'}
         </button>
       </form>
     </div>
