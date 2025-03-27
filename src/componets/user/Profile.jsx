@@ -4,19 +4,20 @@ import AppContext from '../../context/AppContext';
 import { TriangleAlert } from 'lucide-react';
 
 const Profile = () => {
-  const { user ,logout ,isAuth} = useContext(AppContext);
+  const { user, logout, isAuth } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout();
     navigate('/login');
   };
+  console.log(user)
 
-  if(!isAuth){
+  if (!isAuth) {
     return (<>
-    <TriangleAlert className='mt-5' />
-    <div className="text-center ">Looks like you are not logged in ..!</div> 
-    <Link to='/login' className='btn btn-success mt-4'>Login Now</Link>
+      <TriangleAlert className='mt-5' />
+      <div className="text-center ">Looks like you are not logged in ..!</div>
+      <Link to='/login' className='btn btn-success mt-4'>Login Now</Link>
     </>);
   }
 
@@ -26,7 +27,7 @@ const Profile = () => {
         {user ? (
           <div className="w-100">
             <h2 className='text-center mb-3'>Welcome  {user.name}</h2>
-             <h4>Your Info</h4>
+            <h4>Your Info</h4>
 
             <div className="d-flex flex-column flex-md-row align-items-center align-items-md-start">
               <div className="text-center m-3">
@@ -70,23 +71,22 @@ const Profile = () => {
             </div>
 
             <div className="mt-3">
-              <h5>Your Orders:</h5>
+              <h5>Your Last Orders:</h5>
               {user.orders && user.orders.length > 0 ? (
                 <div className="d-flex flex-column gap-2">
-                  <Link to='/user/allorders' className='btn btn-success' style={{maxWidth:'200px'}}>All Orders</Link>
-                  {user.orders.map((order) => (
-                    <div key={order._id} className='p-2 rounded' style={{ backgroundColor: '#65ea2a48' }}>
-                      <p><strong>Order ID:</strong> {order._id}</p>
-                      <p><strong>Status:</strong> {order.status}</p>
-                      <p><strong>Payment:</strong> {order.payment}</p>
-                      <p><strong>Total Amount:</strong> {order.total}</p>
-                    </div>
-                  ))}
+                  {/* <Link to='/user/allorders' className='btn btn-success' style={{ maxWidth: '200px' }}>All Orders</Link> */}
+                  <div key={user.orders[user.orders.length - 1]._id} className='p-2 rounded' style={{ backgroundColor: '#65ea2a48' }}>
+                    <p><strong>Order ID:</strong> {user.orders[user.orders.length - 1]._id}</p>
+                    <p><strong>Status:</strong> {user.orders[user.orders.length - 1].status}</p>
+                    <p><strong>Payment:</strong> {user.orders[user.orders.length - 1].payment}</p>
+                    <p><strong>Total Amount:</strong> {user.orders[user.orders.length - 1].total}</p>
+                  </div>
                 </div>
               ) : (
                 <p>No orders available</p>
               )}
             </div>
+
           </div>
         ) : (
           <p>No user data available</p>

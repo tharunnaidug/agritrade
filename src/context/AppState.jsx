@@ -432,6 +432,31 @@ const AppState = (props) => {
             });
         }
     };
+    const userOrder = async (id) => {
+        try {
+            let response = await axios.get(`${url}/user/order/${id}`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching Seller Order ', error);
+        }
+    };
+    const cancelOrder = async (id) => {
+        try {
+            let response = await axios.put(`${url}/user/order/cancel/${id}`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            console.log(response)
+            return response;
+        } catch (error) {
+            console.error('Error cancelling order:', error);
+        }
+    };
+    
 
     //Sellers
     const sendSellerOtp = async (email) => {
@@ -757,7 +782,7 @@ const AppState = (props) => {
     };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder}}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder,userOrder,cancelOrder,setUserReload}}>
             {props.children}
         </AppContext.Provider>
     )

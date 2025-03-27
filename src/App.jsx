@@ -84,7 +84,7 @@ function App() {
       <Route path='/user/allorders' element={<Alluserorders />} />
       <Route path='/user/cart' element={<Cart />} />
       <Route path='/user/checkout' element={<Checkout />} />
-      <Route path='/user/order' element={<Order />} />
+      <Route path='/user/order/:id' element={<Order />} />
       <Route path='/user/payment' element={<Payment />} />
       <Route path='/user/forgotpassword' element={<Forgotpassword />} />
 
