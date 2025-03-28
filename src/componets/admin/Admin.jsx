@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../../context/AppContext";
-import { TriangleAlert, Users, ShoppingBag, Box, Gavel, Clock, PackageCheck, Truck, CheckCircle, Hourglass } from 'lucide-react';
+import { TriangleAlert, Users, ShoppingBag, Box, Gavel, Clock, PackageCheck, Truck, CheckCircle, Hourglass, Ban, Handshake } from 'lucide-react';
 
 const Admin = () => {
     const { admin, isAdmin, adminLogout } = useContext(AppContext);
@@ -50,11 +50,12 @@ const Admin = () => {
                 <DashboardCard title="Total Products" value={admin.dashboard.totalProducts} icon={<Box size={32} />} bgColor="warning" />
                 <DashboardCard title="Total Auctions" value={admin.dashboard.totalAuctions} icon={<Gavel size={32} />} bgColor="info" />
                 <DashboardCard title="Pending Auctions" value={admin.dashboard.pendingAuctions} icon={<Clock size={32} />} bgColor="danger" />
-                <DashboardCard title="Total Orders" value={admin.dashboard.totalOrders} icon={<PackageCheck size={32} />} bgColor="primary" />
-                <DashboardCard title="Delivered Orders" value={admin.dashboard.deliveredOrders} icon={<CheckCircle size={32} />} bgColor="success" />
-                <DashboardCard title="Shipped Orders" value={admin.dashboard.shippedOrders} icon={<Truck size={32} />} bgColor="info" />
-                <DashboardCard title="Confirmed Orders" value={admin.dashboard.confirmedOrders} icon={<CheckCircle size={32} />} bgColor="primary" />
+                <DashboardCard title="Total Orders" value={admin.dashboard.totalOrders} icon={<Handshake size={32} />} bgColor="primary" />
                 <DashboardCard title="Pending Orders" value={admin.dashboard.pendingOrders} icon={<Hourglass size={32} />} bgColor="warning" />
+                <DashboardCard title="Confirmed Orders" value={admin.dashboard.confirmedOrders} icon={<CheckCircle size={32} />} bgColor="primary" />
+                <DashboardCard title="Shipped Orders" value={admin.dashboard.shippedOrders} icon={<Truck size={32} />} bgColor="info" />
+                <DashboardCard title="Delivered Orders" value={admin.dashboard.deliveredOrders} icon={<CheckCircle size={32} />} bgColor="success" />
+                <DashboardCard title="Cancelled Orders" value={admin.dashboard.cancalledOrders} icon={<Ban size={32} />} bgColor="danger" />
             </div>
 
             <div className="d-flex flex-wrap justify-content-center mt-4">
@@ -66,7 +67,7 @@ const Admin = () => {
                 <NavButton to='/admin/allsellers' text="All Sellers" />
                 <NavButton to='/admin/updateauction' text="Update Auction" />
                 <NavButton to='/admin/updateproduct' text="Update Product" />
-                <NavButton to='/admin/updateuser' text="Update User" />
+                {/* <NavButton to='/admin/updateuser' text="Update User" /> */}
                 <NavButton to='/admin/updateorder' text="Update Order" />
                 <button className="btn btn-danger w-100 mt-3" onClick={handleLogout}>Logout</button>
             

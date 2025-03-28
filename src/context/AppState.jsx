@@ -816,9 +816,63 @@ const AppState = (props) => {
 
         // return true;
     };
+    const adminAllUsers = async () => {
+        try {
+            let response = await axios.get(`${url}/admin/users`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            // setAdmin(response.data)
+            return (response.data);
+        } catch (error) {
+            console.error('Error fetching Admin Dashboard :', error);
+        }
+    };
+    const adminAllOrders = async () => {
+        try {
+            console.log("jhiugjbgjhhb");
+            let response = await axios.get(`${url}/admin/orders`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            console.log(response);
+            console.log("jhiugjbgjhhb");
+            // setAdmin(response.data)
+            return response;
+        } catch (error) {
+            console.error('Error fetching Admin Dashboard :', error);
+        }
+    };
+    const adminAllProducts = async () => {
+        try {
+            let response = await axios.get(`${url}/admin/products`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            // setAdmin(response.data)
+            return (response.data);
+        } catch (error) {
+            console.error('Error fetching Admin Dashboard :', error);
+        }
+    };
+    const adminAllSellers = async () => {
+        try {
+            let response = await axios.get(`${url}/admin/sellers`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            // setAdmin(response.data)
+            return (response.data);
+        } catch (error) {
+            console.error('Error fetching Admin Dashboard :', error);
+        }
+    };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder,userOrder,cancelOrder,setUserReload,UpdateUserPro}}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder,userOrder,cancelOrder,setUserReload,UpdateUserPro,adminAllOrders,adminAllProducts,adminAllSellers,adminAllUsers}}>
             {props.children}
         </AppContext.Provider>
     )
