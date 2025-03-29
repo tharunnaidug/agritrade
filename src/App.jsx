@@ -74,10 +74,10 @@ function App() {
       <Route path='/admin/allproducts' element={<Allproducts />} />
       <Route path='/admin/allorders' element={<Allorders />} />
       <Route path='/admin/allsellers' element={<Allsellers />} />
-      <Route path='/admin/updateauction' element={<Updateauction />} />
-      <Route path='/admin/updateproduct' element={<Updateproduct />} />
-      <Route path='/admin/updateuser' element={<Updateuser />} />
-      <Route path='/admin/updateorder' element={<Updateorder />} />
+      <Route path='/admin/updateauction/id' element={<Updateauction />} />
+      <Route path='/admin/updateproduct/id' element={<Updateproduct />} />
+      <Route path='/admin/updateuser/id' element={<Updateuser />} />
+      <Route path='/admin/updateorder/:id' element={<Updateorder />} />
 
       <Route path='/user/profile' element={<Profile />} />
       <Route path='/user/updateprofile' element={<Updateprofile />} />

@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 
 const statusOrder = ["Placed", "Confirmed", "Shipped", "Delivered", "Cancelled"];
 
 const Allorders = () => {
   const { adminAllOrders } = useContext(AppContext);
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -55,7 +57,10 @@ const Allorders = () => {
           ))}
         </select>
       </div>
-
+       
+      <div className="d-flex flex-wrap justify-content-center">
+      <h5>{filteredOrders?.length ||0} Order(s) Found</h5>
+      </div>
       <div className="d-flex flex-wrap justify-content-center">
         {filteredOrders.map((order) => (
           <div key={order._id} className="card shadow-sm p-3 m-3" style={{ width: "100%", maxWidth: "800px", display: "flex", flexDirection: "row", alignItems: "center" }}>
@@ -83,6 +88,7 @@ const Allorders = () => {
               ))}
               <h6>Shipping Address:</h6>
               <p className="card-text">{order.address.fullname}, {order.address.addressLine1}, {order.address.city}, {order.address.state} - {order.address.pincode}</p>
+              <button className="btn btn-primary mt-2" onClick={() => navigate(`/admin/updateorder/${order._id}`)}>Edit Order</button>
             </div>
           </div>
         ))}

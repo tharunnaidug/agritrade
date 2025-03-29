@@ -59,16 +59,14 @@ const Admin = () => {
             </div>
 
             <div className="d-flex flex-wrap justify-content-center mt-4">
-                <NavButton to='/admin/login' text="Login" />
+                <NavButton to='/admin/allorders' text="All Orders" />
                 <NavButton to='/admin/allproducts' text="All Products" />
                 <NavButton to='/admin/allusers' text="All Users" />
                 <NavButton to='/admin/allauctions' text="All Auctions" />
-                <NavButton to='/admin/allorders' text="All Orders" />
                 <NavButton to='/admin/allsellers' text="All Sellers" />
-                <NavButton to='/admin/updateauction' text="Update Auction" />
-                <NavButton to='/admin/updateproduct' text="Update Product" />
-                {/* <NavButton to='/admin/updateuser' text="Update User" /> */}
-                <NavButton to='/admin/updateorder' text="Update Order" />
+                <NavButton to='/admin/updateauction/1' text="Update Auction" />
+                <NavButton to='/admin/updateproduct/1' text="Update Product" />
+                <NavButton to='/admin/updateuser/1' text="Update User" />
                 <button className="btn btn-danger w-100 mt-3" onClick={handleLogout}>Logout</button>
             
             </div>

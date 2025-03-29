@@ -831,14 +831,11 @@ const AppState = (props) => {
     };
     const adminAllOrders = async () => {
         try {
-            console.log("jhiugjbgjhhb");
             let response = await axios.get(`${url}/admin/orders`, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
             console.log(response);
-            console.log("jhiugjbgjhhb");
-            // setAdmin(response.data)
             return response;
         } catch (error) {
             console.error('Error fetching Admin Dashboard :', error);
@@ -870,9 +867,20 @@ const AppState = (props) => {
             console.error('Error fetching Admin Dashboard :', error);
         }
     };
+    const adminUpdateOrder = async ( id,status) => {
+        try {
+            const { data } = await axios.post(`${url}/admin/updateorder/${id}`, status, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder,userOrder,cancelOrder,setUserReload,UpdateUserPro,adminAllOrders,adminAllProducts,adminAllSellers,adminAllUsers}}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder,userOrder,cancelOrder,setUserReload,UpdateUserPro,adminAllOrders,adminAllProducts,adminAllSellers,adminAllUsers,adminUpdateOrder}}>
             {props.children}
         </AppContext.Provider>
     )
