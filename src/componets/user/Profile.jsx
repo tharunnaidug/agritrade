@@ -10,6 +10,9 @@ const Profile = () => {
   const handleLogout = async () => {
     await logout();
     navigate('/login');
+    setTimeout(() => {
+      window.location.reload();
+  }, 100);
   };
   // console.log(user)
 

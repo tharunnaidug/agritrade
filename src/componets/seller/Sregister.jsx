@@ -82,6 +82,9 @@ const Sregister = () => {
       } else {
         localStorage.setItem('ATSELLER', data?.username);
         navigate('/seller');
+        setTimeout(() => {
+          window.location.reload();
+      }, 100);
       }
     } catch (error) {
       console.error('Error submitting form:', error);

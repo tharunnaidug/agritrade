@@ -9,6 +9,9 @@ const Shome = () => {
   const handleLogout = async () => {
     await sellerLogout();
     navigate('/seller/login');
+    setTimeout(() => {
+      window.location.reload();
+  }, 100);
   };
 
   return (

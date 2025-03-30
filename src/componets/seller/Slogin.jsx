@@ -39,6 +39,10 @@ const Slogin = () => {
             } else {
                 localStorage.setItem('ATSELLER', data?.username);
                 navigate('/seller');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+
             }
         } catch (error) {
             console.error('Login failed:', error);

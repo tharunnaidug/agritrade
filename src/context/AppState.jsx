@@ -38,12 +38,12 @@ const AppState = (props) => {
                 } else {
                     setIsSeller(false);
                 }
-                const atAdmin=localStorage.getItem("ATADMIN");
-                if(atAdmin){
+                const atAdmin = localStorage.getItem("ATADMIN");
+                if (atAdmin) {
                     setIsAdmin(true);
                     await adminDashboard();
-                }else{
-                    setIsSeller(false);
+                } else {
+                    setIsAdmin(false);
                 }
             } catch (error) {
                 console.error('Error Getting Auth from Browser:', error);
@@ -51,7 +51,7 @@ const AppState = (props) => {
         }
 
         getAuth();
-        if(isAuth){
+        if (isAuth) {
             getCart();
         }
         setUserReload(false);
@@ -87,6 +87,7 @@ const AppState = (props) => {
             });
 
             setIsAuth(true);
+
             toast.success("Welcome Back!", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -123,6 +124,7 @@ const AppState = (props) => {
             });
 
             setIsAuth(true);
+
             toast.success("Welcome! ", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -362,7 +364,7 @@ const AppState = (props) => {
     };
     const placeOrder = async (payment) => {
         try {
-            let response = await axios.post(`${url}/user/placeorder`,{payment}, {
+            let response = await axios.post(`${url}/user/placeorder`, { payment }, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
@@ -398,7 +400,7 @@ const AppState = (props) => {
     const updateAddress = async (formData) => {
         try {
             let response = await axios.post(`${url}/user/address/update`,
-                 formData , {
+                formData, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
@@ -459,7 +461,7 @@ const AppState = (props) => {
     const UpdateUserPro = async (formData) => {
         try {
             let response = await axios.post(`${url}/user/profile/update`,
-                 formData , {
+                formData, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
@@ -536,6 +538,7 @@ const AppState = (props) => {
             });
 
             setIsSeller(true);
+
             toast.success("Welcome Back!", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -572,6 +575,7 @@ const AppState = (props) => {
             });
 
             setIsSeller(true);
+
             toast.success("Welcome! ", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -653,12 +657,12 @@ const AppState = (props) => {
             throw error;
         }
     };
-    const updateOrder = async ( id,status) => {
+    const updateOrder = async (id, status) => {
         try {
             const { data } = await axios.post(`${url}/seller/updateorder/${id}`, status, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            
+
             return data;
         } catch (error) {
             throw error;
@@ -751,7 +755,7 @@ const AppState = (props) => {
 
     //Admin
     const adminLogin = async (formData) => {
-         if(formData.username=="admin" &&formData.password=="admin"){
+        if (formData.username == "admin" && formData.password == "admin") {
             console.log(formData)
 
             setIsAuth(true);
@@ -866,7 +870,7 @@ const AppState = (props) => {
             console.error('Error fetching Admin All Sellers :', error);
         }
     };
-    const adminUpdateProduct = async ( id,formData) => {
+    const adminUpdateProduct = async (id, formData) => {
         try {
             const { data } = await axios.post(`${url}/admin/updateproduct/${id}`, formData, {
                 headers: { 'Content-Type': 'application/json' },
@@ -898,12 +902,12 @@ const AppState = (props) => {
             throw error;
         }
     };
-    const adminUpdateOrder = async ( id,status) => {
+    const adminUpdateOrder = async (id, status) => {
         try {
             const { data } = await axios.post(`${url}/admin/updateorder/${id}`, status, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            
+
             return data;
         } catch (error) {
             throw error;
@@ -911,7 +915,7 @@ const AppState = (props) => {
     };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder,userOrder,cancelOrder,setUserReload,UpdateUserPro,adminAllOrders,adminAllProducts,adminAllSellers,adminAllUsers,adminUpdateOrder,adminUpdateProduct}}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart, adminLogin, admin, isAdmin, adminLogout, updateAddress, placeOrder, sellerAllOrders, sellerOrder, updateOrder, userOrder, cancelOrder, setUserReload, UpdateUserPro, adminAllOrders, adminAllProducts, adminAllSellers, adminAllUsers, adminUpdateOrder, adminUpdateProduct, isSeller }}>
             {props.children}
         </AppContext.Provider>
     )

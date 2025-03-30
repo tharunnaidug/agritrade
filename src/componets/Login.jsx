@@ -46,6 +46,9 @@ const Login = () => {
             } else {
                 localStorage.setItem('AGRITRADE', data?.username);
                 navigate('/user/profile');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             }
         } catch (error) {
             console.error('Login failed:', error);

@@ -44,12 +44,14 @@ import Forgotpassword from './componets/user/Forgotpassword.jsx';
 import Sforgotpassword from './componets/seller/Sforgotpassword.jsx';
 import Product from './componets/products/Product.jsx';
 import Alogin from './componets/admin/Alogin.jsx';
+import Navbar from './componets/Navbar.jsx'
 
 function App() {
 
   return (
     <Router>
       <ToastContainer />
+      <Navbar />
       <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/products' element={<Products />} />
