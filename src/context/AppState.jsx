@@ -824,9 +824,9 @@ const AppState = (props) => {
             });
             // console.log(response.data);
             // setAdmin(response.data)
-            return (response.data);
+            return response.data;
         } catch (error) {
-            console.error('Error fetching Admin Dashboard :', error);
+            console.error('Error fetching Admin All USers :', error);
         }
     };
     const adminAllOrders = async () => {
@@ -838,7 +838,7 @@ const AppState = (props) => {
             console.log(response);
             return response;
         } catch (error) {
-            console.error('Error fetching Admin Dashboard :', error);
+            console.error('Error fetching Admin Allorders :', error);
         }
     };
     const adminAllProducts = async () => {
@@ -847,11 +847,10 @@ const AppState = (props) => {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
-            // console.log(response.data);
-            // setAdmin(response.data)
-            return (response.data);
+            // console.log(response);
+            return response;
         } catch (error) {
-            console.error('Error fetching Admin Dashboard :', error);
+            console.error('Error fetching Admin All products :', error);
         }
     };
     const adminAllSellers = async () => {
@@ -864,7 +863,39 @@ const AppState = (props) => {
             // setAdmin(response.data)
             return (response.data);
         } catch (error) {
-            console.error('Error fetching Admin Dashboard :', error);
+            console.error('Error fetching Admin All Sellers :', error);
+        }
+    };
+    const adminUpdateProduct = async ( id,formData) => {
+        try {
+            const { data } = await axios.post(`${url}/admin/updateproduct/${id}`, formData, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            toast.success("Updated !", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+            return data;
+        } catch (error) {
+            toast.error("Internal Server Error!", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+            throw error;
         }
     };
     const adminUpdateOrder = async ( id,status) => {
@@ -880,7 +911,7 @@ const AppState = (props) => {
     };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder,userOrder,cancelOrder,setUserReload,UpdateUserPro,adminAllOrders,adminAllProducts,adminAllSellers,adminAllUsers,adminUpdateOrder}}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart,adminLogin ,admin,isAdmin,adminLogout,updateAddress,placeOrder,sellerAllOrders,sellerOrder,updateOrder,userOrder,cancelOrder,setUserReload,UpdateUserPro,adminAllOrders,adminAllProducts,adminAllSellers,adminAllUsers,adminUpdateOrder,adminUpdateProduct}}>
             {props.children}
         </AppContext.Provider>
     )
