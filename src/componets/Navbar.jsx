@@ -62,7 +62,7 @@ const Navbar = () => {
                         )}
 
                         {isSeller && (
-                            <Link className="nav-link fw-semibold" to={isSeller ? "/seller/profile" : "/login"}>
+                            <Link className="nav-link fw-semibold" to={isSeller ? "/seller" : "/login"}>
                                 <User /> {isSeller ? "Profile" : "Login"}
                             </Link>
                         )}

@@ -44,8 +44,8 @@ const Register = () => {
       setOtpSent(true);
       setLoading(true); 
     } catch (error) {
-      console.error("Failed to send OTP", error);
-      setOtpError("Failed to send OTP. Please try again.");
+      console.error("Failed to send OTP", error.response?.data?.message);
+      setOtpError(error.response?.data?.message||"Failed to send OTP. Please try again.");
     } finally {
       setLoading(false);
     }

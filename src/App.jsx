@@ -45,6 +45,7 @@ import Sforgotpassword from './componets/seller/Sforgotpassword.jsx';
 import Product from './componets/products/Product.jsx';
 import Alogin from './componets/admin/Alogin.jsx';
 import Navbar from './componets/Navbar.jsx'
+import Usersauction from './componets/auction/Usersauction.jsx';
 
 function App() {
 
@@ -64,7 +65,8 @@ function App() {
       <Route path='/otp' element={<Otp />} />
 
       <Route path='/auction' element={<Auction />} />
-      <Route path='/userauction' element={<Userauctions />} />
+      <Route path='/userlistedauction' element={<Userauctions />} />
+      <Route path='/userauctions' element={<Usersauction />} />
       <Route path='/auctionlive' element={<Auctionlive />} />
       <Route path='/addcrop' element={<Addcrop />} />
 
