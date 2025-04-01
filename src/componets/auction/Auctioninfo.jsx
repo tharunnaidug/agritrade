@@ -4,17 +4,19 @@ import AppContext from '../../context/AppContext';
 import { TriangleAlert } from 'lucide-react';
 
 const Auctioninfo = () => {
-    const { isAuth, viewAuctionInfo } = useContext(AppContext);
+    const { isAuth, viewAuctionInfo, user, interested } = useContext(AppContext);
     const { id } = useParams();
     const [auction, setAuction] = useState(null);
     const [loading, setLoading] = useState(true);
-    
+    const [isInterested, setIsInterested] = useState(false);
+
     useEffect(() => {
         const fetchAuction = async () => {
             try {
                 const data = await viewAuctionInfo(id);
                 if (data.message === "success") {
                     setAuction(data.auction);
+                    setIsInterested(data.auction.interestedUsers.includes(user?.id));
                 }
             } catch (error) {
                 console.error("Error fetching auction details:", error);
@@ -23,7 +25,16 @@ const Auctioninfo = () => {
             }
         };
         fetchAuction();
-    }, [id, viewAuctionInfo]);
+    }, [id, viewAuctionInfo, user?.id]);
+
+    const handleInterested = async () => {
+        try {
+            await interested(id);
+            setIsInterested(true);
+        } catch (error) {
+            console.error("Error marking interest:", error);
+        }
+    };
 
     if (!isAuth) {
         return (
@@ -65,6 +76,17 @@ const Auctioninfo = () => {
                 <p><strong>Status:</strong> {auction.status}</p>
                 <p><strong>Seller:</strong> {auction.seller.name}</p>
                 <p><strong>Comments:</strong> {auction.comment}</p>
+                
+                <div className="mt-3">
+                    {auction.seller._id === user?.id ? (
+                        <p className="text-muted">Number of Interested Users: {auction.interestedUsers?.length}</p>
+                    ) : isInterested ? (
+                        <p className="text-success">You will be notified before the auction starts.</p>
+                    ) : (
+                        <button className="btn btn-success" onClick={handleInterested}>I'm Interested</button>
+                    )}
+                </div>
+
                 <h4 className="mt-4">Bids</h4>
                 {auction.bids.length > 0 ? (
                     <ul className="list-group">

@@ -4,8 +4,9 @@ import AppContext from '../../context/AppContext';
 import { TriangleAlert } from 'lucide-react';
 
 const Auction = () => {
-  const { isAuth, upcomingAuctions } = useContext(AppContext);
+  const { isAuth, upcomingAuctions, liveAuctions } = useContext(AppContext);
   const [featuredAuctions, setFeaturedAuctions] = useState([]);
+  const [liveAuctionList, setLiveAuctionList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('date');
   const [filteredAuctions, setFilteredAuctions] = useState([]);
@@ -13,29 +14,33 @@ const Auction = () => {
   useEffect(() => {
     const fetchAuctions = async () => {
       try {
-        const data = await upcomingAuctions();
-        if (data.message === "success") {
-          setFeaturedAuctions(data.upcomingAuctions);
+        const [upcomingData, liveData] = await Promise.all([upcomingAuctions(), liveAuctions()]);
+
+        if (upcomingData.message === "success") {
+          setFeaturedAuctions(upcomingData.upcomingAuctions);
+        }
+
+        if (liveData.message === "success") {
+          setLiveAuctionList(liveData.liveAuc);
         }
       } catch (error) {
         console.error("Error fetching auctions:", error);
       }
     };
+
     fetchAuctions();
-  }, [upcomingAuctions]);
+  }, [upcomingAuctions, liveAuctions]);
 
   useEffect(() => {
     let filtered = [...featuredAuctions];
-    
-    // Filter based on search term
+
     if (searchTerm) {
       filtered = filtered.filter((auction) =>
         auction.product.toLowerCase().includes(searchTerm.toLowerCase()) ||
         auction.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    
-    // Sort based on the selected option
+
     if (sortOption === 'price') {
       filtered.sort((a, b) => a.baseBid - b.baseBid);
     } else if (sortOption === 'date') {
@@ -64,10 +69,33 @@ const Auction = () => {
         <Link to='/userlistedauction' className='btn btn-secondary'>Your Listed Auctions</Link>
         <Link to='/userauctions' className='btn btn-warning'>Your Auctions</Link>
       </div>
-      
-      <h2 className="text-center mb-3">Featured Auctions</h2>
 
-      {/* Search Bar */}
+      <h2 className="text-center mb-3">Live Auctions</h2>
+      <div className="row mb-4">
+        {liveAuctionList?.length > 0 ? (
+          liveAuctionList.map((auction) => (
+            <div key={auction._id} className="col-md-4 mb-4">
+              <div className="card shadow-sm h-100 text-center">
+                <img src={auction.imgSrc[0]} className="card-img-top mx-auto" alt={auction.product} style={{ height: '200px', width: "200px", objectFit: 'cover' }} />
+                <div className="card-body">
+                  <h5 className="card-title">{auction.product}</h5>
+                  <p className="card-text text-truncate" style={{ maxWidth: '100%' }}>{auction.description}</p>
+                  <p className="fw-bold">Base Bid: ₹{auction.baseBid}</p>
+                  <p className="text-muted">Auction Date: {new Date(auction.auctionDateTime).toLocaleString()}</p>
+                  <p className="text-muted">Quantity: {auction.qty} {auction.unit}</p>
+                  <p className="text-muted">State: {auction.state}</p>
+                  <p className="text-muted">Payment Mode: {auction.payment}</p>
+                  <Link to={`/auctionlive/${auction._id}`} className="btn btn-danger w-100">View Auction</Link>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-center">No Live Auctions</p>
+        )}
+      </div>
+
+      <h2 className="text-center mb-3">Featured Auctions</h2>
       <div className="mb-4 d-flex justify-content-between align-items-center">
         <input
           type="text"
@@ -76,7 +104,6 @@ const Auction = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        {/* Sort Dropdown */}
         <select
           className="form-select w-auto ms-3"
           value={sortOption}

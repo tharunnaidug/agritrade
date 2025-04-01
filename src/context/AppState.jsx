@@ -927,10 +927,33 @@ const AppState = (props) => {
             console.error('Error fetching Listed Auctions of user ', error);
         }
     };
+    const myAuctions = async () => {
+        try {
+            let response = await axios.get(`${url}/auction//allMyAuctions`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching Auctions of user ', error);
+        }
+    };
                //Featured Auctions
     const upcomingAuctions = async () => {
         try {
             let response = await axios.get(`${url}/auction/upcomingAuctions`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching upcoming Auctions ', error);
+        }
+    };
+    const liveAuctions = async () => {
+        try {
+            let response = await axios.get(`${url}/auction/liveAuctions`, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
@@ -946,7 +969,7 @@ const AppState = (props) => {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
-            console.log(response);
+            // console.log(response);
             return response.data;
         } catch (error) {
             console.error('Error fetching Auction Info ', error);
@@ -963,9 +986,20 @@ const AppState = (props) => {
             throw error;
         }
     };
+    const interested = async (auctionId) => {
+        try {
+            const { data } = await axios.post(`${url}/auction/interested`, {auctionId}, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            console.log(data)
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart, adminLogin, admin, isAdmin, adminLogout, updateAddress, placeOrder, sellerAllOrders, sellerOrder, updateOrder, userOrder, cancelOrder, setUserReload, UpdateUserPro, adminAllOrders, adminAllProducts, adminAllSellers, adminAllUsers, adminUpdateOrder, adminUpdateProduct, isSeller,addAuction,listedAuctions,upcomingAuctions,viewAuctionInfo }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart, adminLogin, admin, isAdmin, adminLogout, updateAddress, placeOrder, sellerAllOrders, sellerOrder, updateOrder, userOrder, cancelOrder, setUserReload, UpdateUserPro, adminAllOrders, adminAllProducts, adminAllSellers, adminAllUsers, adminUpdateOrder, adminUpdateProduct, isSeller,addAuction,listedAuctions,upcomingAuctions,viewAuctionInfo,interested,liveAuctions,myAuctions }}>
             {props.children}
         </AppContext.Provider>
     )

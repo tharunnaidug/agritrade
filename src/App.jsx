@@ -69,7 +69,7 @@ function App() {
       <Route path='/auction/:id' element={<Auctioninfo />} />
       <Route path='/userlistedauction' element={<Userauctions />} />
       <Route path='/userauctions' element={<Usersauction />} />
-      <Route path='/auctionlive' element={<Auctionlive />} />
+      <Route path='/auctionlive/:id' element={<Auctionlive />} />
       <Route path='/addcrop' element={<Addcrop />} />
 
       
