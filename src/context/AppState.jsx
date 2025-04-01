@@ -922,10 +922,34 @@ const AppState = (props) => {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
-            console.log(response.data);
             return response.data;
         } catch (error) {
             console.error('Error fetching Listed Auctions of user ', error);
+        }
+    };
+               //Featured Auctions
+    const upcomingAuctions = async () => {
+        try {
+            let response = await axios.get(`${url}/auction/upcomingAuctions`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching upcoming Auctions ', error);
+        }
+    };
+    const viewAuctionInfo = async (id) => {
+        try {
+            let response = await axios.get(`${url}/auction/auction/${id}`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            console.log(response);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching Auction Info ', error);
         }
     };
     const addAuction = async (formData) => {
@@ -933,6 +957,7 @@ const AppState = (props) => {
             const { data } = await axios.post(`${url}/auction/addauction`, formData, {
                 headers: { 'Content-Type': 'application/json' },
             });
+            console.log(data)
             return data;
         } catch (error) {
             throw error;
@@ -940,7 +965,7 @@ const AppState = (props) => {
     };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart, adminLogin, admin, isAdmin, adminLogout, updateAddress, placeOrder, sellerAllOrders, sellerOrder, updateOrder, userOrder, cancelOrder, setUserReload, UpdateUserPro, adminAllOrders, adminAllProducts, adminAllSellers, adminAllUsers, adminUpdateOrder, adminUpdateProduct, isSeller,addAuction,listedAuctions }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart, adminLogin, admin, isAdmin, adminLogout, updateAddress, placeOrder, sellerAllOrders, sellerOrder, updateOrder, userOrder, cancelOrder, setUserReload, UpdateUserPro, adminAllOrders, adminAllProducts, adminAllSellers, adminAllUsers, adminUpdateOrder, adminUpdateProduct, isSeller,addAuction,listedAuctions,upcomingAuctions,viewAuctionInfo }}>
             {props.children}
         </AppContext.Provider>
     )
