@@ -857,6 +857,18 @@ const AppState = (props) => {
             console.error('Error fetching Admin All products :', error);
         }
     };
+    const adminAllAuctions = async () => {
+        try {
+            let response = await axios.get(`${url}/auction/admin/allAuctions`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(response);
+            return response;
+        } catch (error) {
+            console.error('Error fetching Admin All products :', error);
+        }
+    };
     const adminAllSellers = async () => {
         try {
             let response = await axios.get(`${url}/admin/sellers`, {
@@ -913,6 +925,19 @@ const AppState = (props) => {
             throw error;
         }
     };
+    const adminUpdateAuction = async (id, formData) => {
+        console.log(formData);
+        try {
+            const { data } = await axios.post(`${url}/auction/admin/updateauction`, formData, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            console.log(data);
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    };
+    
     
     //Auctions
     
@@ -999,7 +1024,7 @@ const AppState = (props) => {
     };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart, adminLogin, admin, isAdmin, adminLogout, updateAddress, placeOrder, sellerAllOrders, sellerOrder, updateOrder, userOrder, cancelOrder, setUserReload, UpdateUserPro, adminAllOrders, adminAllProducts, adminAllSellers, adminAllUsers, adminUpdateOrder, adminUpdateProduct, isSeller,addAuction,listedAuctions,upcomingAuctions,viewAuctionInfo,interested,liveAuctions,myAuctions }}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart, adminLogin, admin, isAdmin, adminLogout, updateAddress, placeOrder, sellerAllOrders, sellerOrder, updateOrder, userOrder, cancelOrder, setUserReload, UpdateUserPro, adminAllOrders, adminAllProducts, adminAllSellers, adminAllUsers, adminUpdateOrder, adminUpdateProduct, isSeller,addAuction,listedAuctions,upcomingAuctions,viewAuctionInfo,interested,liveAuctions,myAuctions ,adminAllAuctions,adminUpdateAuction}}>
             {props.children}
         </AppContext.Provider>
     )
