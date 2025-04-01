@@ -64,7 +64,6 @@ const Admin = () => {
                 <NavButton to='/admin/allusers' text="All Users" />
                 <NavButton to='/admin/allsellers' text="All Sellers" />
                 <NavButton to='/admin/allauctions' text="All Auctions" />
-                <NavButton to='/admin/updateauction/1' text="Update Auction" />
                 {/* <NavButton to='/admin/updateuser/1' text="Update User" /> */}
                 <button className="btn btn-danger w-100 mt-3" onClick={handleLogout}>Logout</button>
             

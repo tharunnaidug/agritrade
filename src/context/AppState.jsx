@@ -1022,9 +1022,33 @@ const AppState = (props) => {
             throw error;
         }
     };
+    const placeBid = async (auctionId, bidAmount) => {
+        try {
+            const { data } = await axios.post(`${url}/auction/placeBid`, { auctionId, bidAmount }, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            console.log(data);
+            return data;
+        } catch (error) {
+            console.log("Error placing bid:", error.response?.data?.error);
+            throw error;
+        }
+    };
+    
+    const viewLiveAuction = async (auctionId) => {
+        try {
+            let response = await axios.get(`${url}/auction/auction/view/${auctionId}`, {
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching Live Auction', error);
+        }
+    };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart, adminLogin, admin, isAdmin, adminLogout, updateAddress, placeOrder, sellerAllOrders, sellerOrder, updateOrder, userOrder, cancelOrder, setUserReload, UpdateUserPro, adminAllOrders, adminAllProducts, adminAllSellers, adminAllUsers, adminUpdateOrder, adminUpdateProduct, isSeller,addAuction,listedAuctions,upcomingAuctions,viewAuctionInfo,interested,liveAuctions,myAuctions ,adminAllAuctions,adminUpdateAuction}}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart, adminLogin, admin, isAdmin, adminLogout, updateAddress, placeOrder, sellerAllOrders, sellerOrder, updateOrder, userOrder, cancelOrder, setUserReload, UpdateUserPro, adminAllOrders, adminAllProducts, adminAllSellers, adminAllUsers, adminUpdateOrder, adminUpdateProduct, isSeller,addAuction,listedAuctions,upcomingAuctions,viewAuctionInfo,interested,liveAuctions,myAuctions ,adminAllAuctions,adminUpdateAuction,viewLiveAuction,placeBid}}>
             {props.children}
         </AppContext.Provider>
     )
