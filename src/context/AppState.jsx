@@ -926,12 +926,12 @@ const AppState = (props) => {
         }
     };
     const adminUpdateAuction = async (id, formData) => {
-        console.log(formData);
+        // console.log(formData);
         try {
             const { data } = await axios.post(`${url}/auction/admin/updateauction`, formData, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            console.log(data);
+            // console.log(data);
             return data;
         } catch (error) {
             throw error;
@@ -954,7 +954,7 @@ const AppState = (props) => {
     };
     const myAuctions = async () => {
         try {
-            let response = await axios.get(`${url}/auction//allMyAuctions`, {
+            let response = await axios.get(`${url}/auction/allMyAuctions`, {
                 headers: { "Content-Type": "application/json" },
                 withCredentials: true,
             });
@@ -1005,7 +1005,6 @@ const AppState = (props) => {
             const { data } = await axios.post(`${url}/auction/addauction`, formData, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            console.log(data)
             return data;
         } catch (error) {
             throw error;
@@ -1016,7 +1015,6 @@ const AppState = (props) => {
             const { data } = await axios.post(`${url}/auction/interested`, {auctionId}, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            console.log(data)
             return data;
         } catch (error) {
             throw error;
@@ -1027,7 +1025,6 @@ const AppState = (props) => {
             const { data } = await axios.post(`${url}/auction/placeBid`, { auctionId, bidAmount }, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            console.log(data);
             return data;
         } catch (error) {
             console.log("Error placing bid:", error.response?.data?.error);

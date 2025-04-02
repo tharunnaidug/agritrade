@@ -18,7 +18,6 @@ const AllAuctions = () => {
     const fetchAuctions = async () => {
       try {
         const data = await adminAllAuctions();
-        console.log(data);
         if (data.data.message === "success") {
           setAuctions({
             pastAuctions: data.data.pastAuctions || [],
@@ -95,6 +94,12 @@ const AllAuctions = () => {
                 >
                   View Live
                 </button>
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => navigate(`/admin/updateauction/${auction._id}`)}
+                >
+                  Update
+                </button>
               </div>
             </div>
           ))
@@ -151,7 +156,7 @@ const AllAuctions = () => {
                 <p><strong>Status:</strong> {auction.status}</p>
                 <button
                   className="btn btn-primary btn-sm"
-                  onClick={() => navigate(`/admin/updateauction/${auction._id}`)}
+                  onClick={() => navigate(`/auction/${auction._id}`)}
                 >
                   View Auction
                 </button>

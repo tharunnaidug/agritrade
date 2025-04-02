@@ -35,7 +35,7 @@ const Profile = () => {
             <div className="d-flex flex-column flex-md-row align-items-center align-items-md-start">
               <div className="text-center m-3">
                 <img
-                  src={user.pic}
+                  src={user.pic||"https://i.ibb.co/B5dhy2XB/free-user-icon-3296-thumb.png"}
                   alt="Profile"
                   className="rounded-circle"
                   width="150"

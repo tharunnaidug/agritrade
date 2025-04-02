@@ -4,7 +4,7 @@ import AppContext from '../../context/AppContext';
 import { TriangleAlert } from 'lucide-react';
 
 const Auctioninfo = () => {
-    const { isAuth, viewAuctionInfo, user, interested } = useContext(AppContext);
+    const { isAuth, viewAuctionInfo, user, interested, isAdmin } = useContext(AppContext);
     const { id } = useParams();
     const [auction, setAuction] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -35,8 +35,7 @@ const Auctioninfo = () => {
             console.error("Error marking interest:", error);
         }
     };
-
-    if (!isAuth) {
+    if (!isAuth && !isAdmin) {
         return (
             <div className="text-center mt-5">
                 <TriangleAlert size={50} className="text-danger" />
@@ -53,16 +52,15 @@ const Auctioninfo = () => {
     if (!auction) {
         return <div className="text-center mt-5">Auction not found.</div>;
     }
-
     return (
         <div className="container mt-4">
             <h2 className="text-center mb-4">Auction Details</h2>
             <div className="card shadow-sm p-4">
                 <div className="text-center">
-                    <img 
-                        src={auction.imgSrc[0]} 
-                        alt={auction.product} 
-                        className="img-fluid rounded mb-3" 
+                    <img
+                        src={auction.imgSrc[0]}
+                        alt={auction.product}
+                        className="img-fluid rounded mb-3"
                         style={{ maxHeight: '300px', objectFit: 'cover' }}
                     />
                 </div>
@@ -76,8 +74,9 @@ const Auctioninfo = () => {
                 <p><strong>Status:</strong> {auction.status}</p>
                 <p><strong>Seller:</strong> {auction.seller.name}</p>
                 <p><strong>Comments:</strong> {auction.comment}</p>
-                
-                <div className="mt-3">
+
+
+                {auction.status == "Ended" || auction.status == "Rejected" ? (<></>) : (<div className="mt-3">
                     {auction.seller._id === user?.id ? (
                         <p className="text-muted">Number of Interested Users: {auction.interestedUsers?.length}</p>
                     ) : isInterested ? (
@@ -85,20 +84,28 @@ const Auctioninfo = () => {
                     ) : (
                         <button className="btn btn-success" onClick={handleInterested}>I'm Interested</button>
                     )}
-                </div>
+                </div>)}
 
                 <h4 className="mt-4">Bids</h4>
-                {auction.bids.length > 0 ? (
+                {auction?.bids?.length > 0 ? (
                     <ul className="list-group">
-                        {auction.bids.map((bid, index) => (
+                        {auction?.bids?.map((bid, index) => (
                             <li key={index} className="list-group-item">
-                                <strong>Bidder:</strong> {bid.bidderName} - <strong>Amount:</strong> ₹{bid.amount}
+                                <strong>Bidder:</strong> {bid.bidder?.name || bid.bidder} <strong>Amount:</strong> ₹{bid.bid}
                             </li>
                         ))}
                     </ul>
                 ) : (
                     <p>No bids placed yet.</p>
                 )}
+                <div className="mt-3">
+                    <p><strong>Highest Bid: </strong>₹{auction?.highestBid || 'N/A'}</p>
+                    {auction?.highestBidder ? (
+                        <p><strong>Highest Bidder:</strong> {auction?.highestBidder.name || auction.highestBidder}</p>
+                    ) : (
+                        <p>No highest bidder yet.</p>
+                    )}
+                </div>
             </div>
         </div>
     );

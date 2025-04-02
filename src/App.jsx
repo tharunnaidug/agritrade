@@ -47,6 +47,7 @@ import Alogin from './componets/admin/Alogin.jsx';
 import Navbar from './componets/Navbar.jsx'
 import Usersauction from './componets/auction/Usersauction.jsx';
 import Auctioninfo from './componets/auction/Auctioninfo.jsx';
+import Footer from './componets/Footer.jsx';
 
 function App() {
 
@@ -107,6 +108,7 @@ function App() {
       <Route path='/seller/forgotpassword' element={<Sforgotpassword/>} />
 
       </Routes>
+      <Footer/>
     </Router>
   )
 }

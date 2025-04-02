@@ -73,7 +73,6 @@ const AuctionLive = () => {
       toast.error(error.response?.data?.error);
     }
   };
-
   if (!auction) {
     return (
       <div className="text-center mt-5">

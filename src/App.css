@@ -40,4 +40,13 @@
 .read-the-docs {
   color: #888;
 }
+::selection {
+  background-color: #28a745; 
+  color: #fff; 
+}
+
+::-moz-selection {
+  background-color: #28a745; 
+  color: #fff;
+}
 
