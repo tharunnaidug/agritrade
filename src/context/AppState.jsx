@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import AppContext from './AppContext';
 import { toast, Bounce } from 'react-toastify';
 import axios from 'axios';
+import { io } from "socket.io-client";
 
 axios.defaults.withCredentials = true;
+const socket = io(import.meta.env.VITE_API_URL, { withCredentials: true });
 
 const AppState = (props) => {
     const url = import.meta.env.VITE_API_URL;
@@ -78,7 +80,38 @@ const AppState = (props) => {
         setReload(false);
 
     }, [reload])
+    useEffect(() => {
+        if (!isAuth) return;
 
+        const showNotification = (title, message) => {
+            if (Notification.permission === "granted") {
+                new Notification(title, { body: message });
+            }
+            toast.info(message);
+        };
+
+        const handleAuctionStarted = (data) => {
+            showNotification("Auction Started", data.message);
+        };
+
+        const handleAuctionReminder = (data) => {
+            showNotification("Auction Reminder", data.message);
+        };
+
+        socket.on("auctionStarted", handleAuctionStarted);
+        socket.on("auctionReminder", handleAuctionReminder);
+
+        return () => {
+            socket.off("auctionStarted", handleAuctionStarted);
+            socket.off("auctionReminder", handleAuctionReminder);
+        };
+    }, [isAuth]);
+
+    useEffect(() => {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+    }, []);
 
     const login = async (formData) => {
         try {
@@ -462,16 +495,16 @@ const AppState = (props) => {
         try {
             let response = await axios.post(`${url}/user/profile/update`,
                 formData, {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-                });
-                // console.log(formData);
-                // console.log(response);
-                setUserReload(true);
-                toast.info(response.data.message || "Address Updated", {
-                    position: "bottom-left",
-                    autoClose: 5000,
-                    hideProgressBar: false,
+                headers: { "Content-Type": "application/json" },
+                withCredentials: true,
+            });
+            // console.log(formData);
+            // console.log(response);
+            setUserReload(true);
+            toast.info(response.data.message || "Address Updated", {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
@@ -495,14 +528,14 @@ const AppState = (props) => {
             });
         }
     };
-    
+
     //Sellers
     const sendSellerOtp = async (email) => {
         try {
             const { data } = await axios.post(`${url}/seller/genarateOtp`, { email }, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            
+
             toast.success("OTP Sent to Email!", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -514,7 +547,7 @@ const AppState = (props) => {
                 theme: "dark",
                 transition: Bounce,
             });
-            
+
             return data;
         } catch (error) {
             toast.error(error.response?.data?.message || "Failed to send OTP!", {
@@ -536,9 +569,9 @@ const AppState = (props) => {
             const { data } = await axios.post(`${url}/seller/login`, formData, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            
+
             setIsSeller(true);
-            
+
             toast.success("Welcome Back!", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -573,9 +606,9 @@ const AppState = (props) => {
             const { data } = await axios.post(`${url}/seller/register`, formData, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            
+
             setIsSeller(true);
-            
+
             toast.success("Welcome! ", {
                 position: "bottom-left",
                 autoClose: 5000,
@@ -621,7 +654,7 @@ const AppState = (props) => {
             theme: "dark",
             transition: Bounce,
         });
-        
+
         return response
     };
     const addProduct = async (formData) => {
@@ -640,7 +673,7 @@ const AppState = (props) => {
                 theme: "dark",
                 transition: Bounce,
             });
-            
+
             return data;
         } catch (error) {
             toast.error(error.response?.data?.error || "Product Add Failed!", {
@@ -662,7 +695,7 @@ const AppState = (props) => {
             const { data } = await axios.post(`${url}/seller/updateorder/${id}`, status, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            
+
             return data;
         } catch (error) {
             throw error;
@@ -673,7 +706,7 @@ const AppState = (props) => {
             const { data } = await axios.post(`${url}/seller/updateproduct/${id}`, formData, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            
+
             return data;
         } catch (error) {
             throw error;
@@ -752,12 +785,12 @@ const AppState = (props) => {
             console.error('Error fetching Seller Orders ', error);
         }
     };
-    
+
     //Admin
     const adminLogin = async (formData) => {
         if (formData.username == "admin" && formData.password == "admin") {
             console.log(formData)
-            
+
             setIsAuth(true);
             toast.success("Welcome Admin !", {
                 position: "bottom-left",
@@ -770,7 +803,7 @@ const AppState = (props) => {
                 theme: "dark",
                 transition: Bounce,
             });
-            
+
             return formData;
         } else {
             toast.error("Incorrect Admin ID Password", {
@@ -803,8 +836,8 @@ const AppState = (props) => {
     const adminLogout = async () => {
         setIsAdmin(false);
         // const response = await axios.get(`${url}/logout`, {
-            //     headers: { 'Content-Type': 'application/json' },
-            // });
+        //     headers: { 'Content-Type': 'application/json' },
+        // });
         localStorage.removeItem("ATADMIN");
         toast.success("Logged Out !", {
             position: "bottom-left",
@@ -937,10 +970,10 @@ const AppState = (props) => {
             throw error;
         }
     };
-    
-    
+
+
     //Auctions
-    
+
     const listedAuctions = async () => {
         try {
             let response = await axios.get(`${url}/auction/allMyListedAuctions`, {
@@ -963,7 +996,7 @@ const AppState = (props) => {
             console.error('Error fetching Auctions of user ', error);
         }
     };
-               //Featured Auctions
+    //Featured Auctions
     const upcomingAuctions = async () => {
         try {
             let response = await axios.get(`${url}/auction/upcomingAuctions`, {
@@ -1012,7 +1045,7 @@ const AppState = (props) => {
     };
     const interested = async (auctionId) => {
         try {
-            const { data } = await axios.post(`${url}/auction/interested`, {auctionId}, {
+            const { data } = await axios.post(`${url}/auction/interested`, { auctionId }, {
                 headers: { 'Content-Type': 'application/json' },
             });
             return data;
@@ -1031,7 +1064,7 @@ const AppState = (props) => {
             throw error;
         }
     };
-    
+
     const viewLiveAuction = async (auctionId) => {
         try {
             let response = await axios.get(`${url}/auction/auction/view/${auctionId}`, {
@@ -1045,7 +1078,7 @@ const AppState = (props) => {
     };
 
     return (
-        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart, adminLogin, admin, isAdmin, adminLogout, updateAddress, placeOrder, sellerAllOrders, sellerOrder, updateOrder, userOrder, cancelOrder, setUserReload, UpdateUserPro, adminAllOrders, adminAllProducts, adminAllSellers, adminAllUsers, adminUpdateOrder, adminUpdateProduct, isSeller,addAuction,listedAuctions,upcomingAuctions,viewAuctionInfo,interested,liveAuctions,myAuctions ,adminAllAuctions,adminUpdateAuction,viewLiveAuction,placeBid}}>
+        <AppContext.Provider value={{ isAuth, login, register, logout, sellerLogout, sendOtp, sendSellerOtp, user, sellerRegister, sellerLogin, seller, addProduct, sellerAllProducts, sellerProduct, deleteProduct, updateProduct, products, addToCart, cart, clearCart, addQty, removeQty, getCart, adminLogin, admin, isAdmin, adminLogout, updateAddress, placeOrder, sellerAllOrders, sellerOrder, updateOrder, userOrder, cancelOrder, setUserReload, UpdateUserPro, adminAllOrders, adminAllProducts, adminAllSellers, adminAllUsers, adminUpdateOrder, adminUpdateProduct, isSeller, addAuction, listedAuctions, upcomingAuctions, viewAuctionInfo, interested, liveAuctions, myAuctions, adminAllAuctions, adminUpdateAuction, viewLiveAuction, placeBid }}>
             {props.children}
         </AppContext.Provider>
     )
