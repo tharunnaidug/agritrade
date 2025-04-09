@@ -40,7 +40,6 @@ import Supdateorder from './componets/seller/Supdateorder.jsx'
 import Sallproducts from './componets/seller/Sallproducts.jsx'
 import Saddproduct from './componets/seller/Saddproduct.jsx'
 import Supdateproduct from './componets/seller/Supdateproduct.jsx'
-import Forgotpassword from './componets/user/Forgotpassword.jsx';
 import Sforgotpassword from './componets/seller/Sforgotpassword.jsx';
 import Product from './componets/products/Product.jsx';
 import Alogin from './componets/admin/Alogin.jsx';
@@ -48,6 +47,9 @@ import Navbar from './componets/Navbar.jsx'
 import Usersauction from './componets/auction/Usersauction.jsx';
 import Auctioninfo from './componets/auction/Auctioninfo.jsx';
 import Footer from './componets/Footer.jsx';
+import Resetpassword from './componets/user/Resetpassword.jsx';
+import ForgotPassword from './componets/user/Forgotpassword.jsx';
+import Sresetpassword from './componets/seller/Sresetpassword.jsx';
 
 function App() {
 
@@ -93,8 +95,8 @@ function App() {
       <Route path='/user/checkout' element={<Checkout />} />
       <Route path='/user/order/:id' element={<Order />} />
       <Route path='/user/payment' element={<Payment />} />
-      <Route path='/user/forgotpassword' element={<Forgotpassword />} />
-
+      <Route path='/user/forgotpassword' element={<ForgotPassword />} />
+      <Route path="/user/resetpassword" element={<Resetpassword />} />
 
       <Route path='/seller' element={<Shome />} />
       <Route path='/seller/register' element={<Sregister />} />
@@ -106,6 +108,7 @@ function App() {
       <Route path='/seller/updateorder/:id' element={<Supdateorder/>} />
       <Route path='/seller/updateproduct/:id' element={<Supdateproduct/>} />
       <Route path='/seller/forgotpassword' element={<Sforgotpassword/>} />
+      <Route path="/seller/resetpassword" element={<Sresetpassword/>} />
 
       </Routes>
       <Footer/>
