@@ -9,6 +9,8 @@ const Supdateproduct = () => {
   const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [avgRating, setAvgRating] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -27,6 +29,8 @@ const Supdateproduct = () => {
       setLoading(true);
       const res = await sellerProduct(id);
       setProduct(res?.product);
+      setReviews(res?.reviews || []);
+      setAvgRating(res?.avgRating || null);
       setFormData({
         title: res?.product?.title,
         description: res?.product?.description,
@@ -202,6 +206,7 @@ const Supdateproduct = () => {
                 <p><strong>Category:</strong> {product.category}</p>
                 <p><strong>Price:</strong> ₹{product.price}</p>
                 <p><strong>Stock:</strong> {product.qty} available</p>
+                {avgRating && <p><strong>Avg Rating:</strong> ⭐ {avgRating}</p>}
                 <div className="d-flex gap-3">
                   <button className="btn btn-primary" onClick={() => setIsEditing(true)}>Edit</button>
                   <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
@@ -211,6 +216,27 @@ const Supdateproduct = () => {
           </div>
         </div>
       </div>
+
+      {/* Reviews */}
+      {!isEditing && (
+        <div className="card shadow-sm p-4 mt-4">
+          <h5 className="mb-3">Customer Reviews ({reviews.length})</h5>
+          {reviews.length === 0 ? (
+            <p className="text-muted">No reviews yet.</p>
+          ) : (
+            reviews.map((rev) => (
+              <div key={rev._id} className="border-bottom pb-3 mb-3">
+                <div className="d-flex justify-content-between align-items-center">
+                  <strong>{rev.user.name}</strong>
+                  <span className="badge bg-warning text-dark">⭐ {rev.rating}</span>
+                </div>
+                <p className="mb-1">{rev.comment}</p>
+                <small className="text-muted">{new Date(rev.createdAt).toLocaleString()}</small>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 };

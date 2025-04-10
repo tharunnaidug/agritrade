@@ -21,6 +21,7 @@ const UpdateProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       const allProductsResponse = await adminAllProducts();
+      console.log(allProductsResponse?.data?.products)
       if (allProductsResponse?.data?.products) {
         const currentProduct = allProductsResponse.data.products.find((p) => p._id === id);
         if (currentProduct) {

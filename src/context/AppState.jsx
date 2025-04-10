@@ -262,18 +262,20 @@ const AppState = (props) => {
             });
             // console.log("myCart", response.data.message);
             setReload(!reload);
-            toast.info(response.data.message, {
-                position: "bottom-left",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            });
-
+            if (response.data.message == "success") {
+                toast.info("Added To Cart Checkout Now!", {
+                    position: "bottom-left",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    transition: Bounce,
+                });
+            }
+            setUserReload(true)
         } catch (error) {
             console.error('Error Adding To Cart:', error);
             toast.info(response.data.message || "Internal Server Error", {
