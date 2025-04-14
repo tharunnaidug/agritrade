@@ -14,6 +14,10 @@ const Product = () => {
     const [reviews, setReviews] = useState([]);
     const [avgRating, setAvgRating] = useState(null);
 
+    const [pincode, setPincode] = useState('');
+    const [deliveryStatus, setDeliveryStatus] = useState(null);
+    const [checkingDelivery, setCheckingDelivery] = useState(false);
+
     const { isAuth, addToCart } = useContext(AppContext);
 
     useEffect(() => {
@@ -23,7 +27,6 @@ const Product = () => {
                     headers: { "Content-Type": "Application/json" },
                     withCredentials: true,
                 });
-                console.log(response.data);
                 setProduct(response.data.product);
                 setReviews(response.data.reviews || []);
                 setAvgRating(response.data.avgRating);
@@ -33,6 +36,30 @@ const Product = () => {
         };
         getProduct();
     }, [id]);
+
+    const checkPincode = async () => {
+        if (!pincode || pincode.length !== 6) {
+            setDeliveryStatus('Please enter a valid 6-digit pincode.');
+            return;
+        }
+
+        setCheckingDelivery(true);
+        try {
+            const res = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
+            const data = await res.json();
+            if (data[0].Status === "Success") {
+                const po = data[0].PostOffice[0];
+                setDeliveryStatus(`✅ Delivery available in ${po.Block}, ${po.State}`);
+            } else {
+                setDeliveryStatus("❌ Delivery not available to this pincode.");
+            }
+        } catch (error) {
+            console.error(error);
+            setDeliveryStatus("Something went wrong while checking pincode.");
+        } finally {
+            setCheckingDelivery(false);
+        }
+    };
 
     if (!product) {
         return (
@@ -96,6 +123,33 @@ const Product = () => {
                             <ShoppingCart className="me-2" />
                             Add to Cart
                         </button>
+                    </div>
+
+                    <div className="mt-4">
+                        <label htmlFor="pincodeInput" className="form-label">Check Delivery Availability</label>
+                        <div className="input-group mb-2">
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="pincodeInput"
+                                placeholder="Enter your pincode"
+                                value={pincode}
+                                onChange={(e) => setPincode(e.target.value)}
+                            />
+                            <button
+                                className="btn btn-outline-primary"
+                                type="button"
+                                onClick={checkPincode}
+                                disabled={checkingDelivery}
+                            >
+                                {checkingDelivery ? "Checking..." : "Check"}
+                            </button>
+                        </div>
+                        {deliveryStatus && (
+                            <div className={`fw-semibold ${deliveryStatus.startsWith("✅") ? "text-success" : "text-danger"}`}>
+                                {deliveryStatus}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

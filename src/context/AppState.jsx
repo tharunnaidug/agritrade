@@ -517,7 +517,7 @@ const AppState = (props) => {
 
         } catch (error) {
             console.error('Error Updating Address:', error);
-            toast.info(response?.data.message || "Internal Server Error", {
+            toast.info(error?.response?.data.error || "Internal Server Error", {
                 position: "bottom-left",
                 autoClose: 5000,
                 hideProgressBar: false,

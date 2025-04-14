@@ -12,7 +12,7 @@ const SaddProduct = () => {
     category: '',
     price: '',
     qty: '',
-    imgScr: [],
+    imgSrc: [],
   });
 
   const [errors, setErrors] = useState({});
@@ -54,7 +54,7 @@ const SaddProduct = () => {
         const url = await handleFileUpload(file);
         uploadedUrls.push(url);
       }
-      setFormData((prev) => ({ ...prev, imgScr: uploadedUrls }));
+      setFormData((prev) => ({ ...prev, imgSrc: uploadedUrls }));
     } catch (error) {
       console.error('Image upload failed', error);
     } finally {
@@ -69,7 +69,7 @@ const SaddProduct = () => {
     if (!formData.category) newErrors.category = 'Category is required';
     if (!formData.price || isNaN(formData.price)) newErrors.price = 'Valid Price is required';
     if (!formData.qty || isNaN(formData.qty)) newErrors.qty = 'Valid Quantity is required';
-    if (formData.imgScr.length === 0) newErrors.imgScr = 'At least one image is required';
+    if (formData.imgSrc.length === 0) newErrors.imgSrc = 'At least one image is required';
     return newErrors;
   };
 
@@ -143,6 +143,32 @@ const SaddProduct = () => {
         </div>
 
         <div className="mb-3">
+          <label htmlFor="price" className="form-label">Price (₹)</label>
+          <input
+            type="number"
+            className={`form-control ${errors.price ? 'is-invalid' : ''}`}
+            id="price"
+            value={formData.price}
+            onChange={handleInputChange}
+            placeholder="Enter product price"
+          />
+          {errors.price && <div className="invalid-feedback">{errors.price}</div>}
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="qty" className="form-label">Quantity</label>
+          <input
+            type="number"
+            className={`form-control ${errors.qty ? 'is-invalid' : ''}`}
+            id="qty"
+            value={formData.qty}
+            onChange={handleInputChange}
+            placeholder="Enter available quantity"
+          />
+          {errors.qty && <div className="invalid-feedback">{errors.qty}</div>}
+        </div>
+
+        <div className="mb-3">
           <label htmlFor="images" className="form-label">Product Images (Multiple At Once)</label>
           <input
             type="file"
@@ -151,14 +177,14 @@ const SaddProduct = () => {
             multiple
             onChange={handleMultipleFiles}
           />
-          {errors.imgScr && <div className="invalid-feedback">{errors.imgScr}</div>}
+          {errors.imgSrc && <div className="invalid-feedback">{errors.imgSrc}</div>}
         </div>
 
-        {formData.imgScr.length > 0 && (
+        {formData.imgSrc.length > 0 && (
           <div className="mb-3">
             <label className="form-label">Image Preview:</label>
             <div className="d-flex gap-2 flex-wrap">
-              {formData.imgScr.map((img, idx) => (
+              {formData.imgSrc.map((img, idx) => (
                 <img key={idx} src={img} alt="product" width="70" height="70" className="rounded" />
               ))}
             </div>
